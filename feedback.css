@@ -7,7 +7,7 @@ body {
 }
 
 .slot:active{
-    cursor: move;
+    cursor: grabbing;
     box-shadow: 1px 1px 20px cyan;
 }
 
@@ -34,13 +34,15 @@ body {
     padding: 0.5em;
     margin: 0 30em;
     font-size: 0.6em;
+    cursor: default;
 }
-.slot .addSlotBtn {
+.addSlotBtn {
     display: none;
     margin: 0 auto;
     padding: 0.2em 0.4em;
     font-size: 0.8em;
     transition: 0.2s;
+    cursor: default;    
 }
 .show {
     visibility: visible;

@@ -3,24 +3,50 @@ $(function() {
     $("#sortable").disableSelection();
 });
 
-function checkOptLen() {}
+function checkOptLen(slotElement) {
+    // console.log(slotElement);
+    optsLen = slotElement.getElementsByClassName("option").length;
+    return optsLen;
+}
 
 function addOption(addOptBtn) {
-    var parent = addOptBtn.target.parentElement;
-    // console.log(parent);
-    var newOption = document.querySelector(".option").cloneNode(true);
-    newOption.nodeValue = "";
-    newOption.getElementsByTagName("input")[0].value = "";
-    var btn = addOptBtn.target;
-    //console.log(btn);
-    parent.insertBefore(newOption, btn);
+    var slotElement = addOptBtn.target.parentElement.parentElement;
+    var optsLen = checkOptLen(slotElement);
+    // console.log(optsLen);
+    if (optsLen <= 4) {
+        $(slotElement.getElementsByClassName("addOptBtn")).show();
+        var parent = addOptBtn.target.parentElement;
+        // console.log(parent);
+        var newOption = document.querySelector(".option").cloneNode(true);
+        newOption.nodeValue = "";
+        newOption.getElementsByTagName("input")[0].value = "";
+        var btn = addOptBtn.target;
+        //console.log(btn);
+        parent.insertBefore(newOption, btn);
+    }
+    if (optsLen >= 4) {
+        $(slotElement.getElementsByClassName("addOptBtn")).hide();
+    }
+    $(slotElement.getElementsByClassName("removeBtn")).show();
+    // var optsLen = checkOptLen(slotElement)
+    // console.log(optsLen);
 }
 function removeOpt(opt) {
-    targetChild = opt.target.parentElement;
-    // console.log(targetChild);
-    var parent = targetChild.parentElement;
-    // console.log(parent);
-    parent.removeChild(targetChild);
+    var slotElement = opt.target.parentElement.parentElement.parentElement;
+    var optsLen = checkOptLen(slotElement);
+    // console.log(opt);
+    if (optsLen >= 2) {
+        $(slotElement.getElementsByClassName("removeBtn")).show();
+        targetChild = opt.target.parentElement;
+        // console.log(targetChild);
+        var parent = targetChild.parentElement;
+        // console.log(parent);
+        parent.removeChild(targetChild);
+    }
+    if (optsLen <= 2) {
+        $(slotElement.getElementsByClassName("removeBtn")).hide();
+    }
+    $(slotElement.getElementsByClassName("addOptBtn")).show();
 }
 
 function addSlot(slot) {
