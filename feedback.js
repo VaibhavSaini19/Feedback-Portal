@@ -17,9 +17,10 @@ function addOption(addOptBtn) {
         $(slotElement.getElementsByClassName("addOptBtn")).show();
         var parent = addOptBtn.target.parentElement;
         // console.log(parent);
-        var newOption = document.querySelector(".option").cloneNode(true);
+        var newOption = slotElement.querySelector(".option").cloneNode(true);
         newOption.nodeValue = "";
         newOption.getElementsByTagName("input")[0].value = "";
+        console.log(newOption.getElementsByTagName("input")[0].name);
         var btn = addOptBtn.target;
         //console.log(btn);
         parent.insertBefore(newOption, btn);
@@ -49,17 +50,32 @@ function removeOpt(opt) {
     $(slotElement.getElementsByClassName("addOptBtn")).show();
 }
 
+function getSlotsLen() {
+    return document.getElementsByClassName("slot").length;
+}
+
 function addSlot(slot) {
     var referenceChild = slot.target.parentElement.parentElement;
     var parent = referenceChild.parentElement;
     // console.log(referenceChild);
     // console.log(parent);
+    var totalSlots = getSlotsLen() + 1;
     var newSlot = document.querySelector(".slot").cloneNode(true);
-    opts = newSlot.getElementsByClassName("options")[0];
-    opts.innerHTML = `
+    var qn = newSlot.getElementsByClassName("question")[0];
+    qn.innerHTML =
+        `
+    <input type="text" name="question` +
+        totalSlots +
+        `" id="question" placeholder="Question" />
+    `;
+    var opts = newSlot.getElementsByClassName("options")[0];
+    opts.innerHTML =
+        `
     <div class="option">
         <i class="far fa-circle"></i>&nbsp;
-        <input type="text" name="response" id="response" value="" placeholder="Option" />
+        <input type="text" name="response` +
+        totalSlots +
+        `[]" id="response" value="" placeholder="Option" />
         <div class="btn removeBtn" onclick="removeOpt(event)">
             <i class="fas fa-times"></i>
         </div>

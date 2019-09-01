@@ -6,12 +6,13 @@ body {
     background-color: #fff;
 }
 
-.slot:active{
+.slot:active {
     cursor: grabbing;
     box-shadow: 1px 1px 20px cyan;
 }
 
-.fas, .far {
+.fas,
+.far {
     pointer-events: none;
 }
 
@@ -42,7 +43,7 @@ body {
     padding: 0.2em 0.4em;
     font-size: 0.8em;
     transition: 0.2s;
-    cursor: default;    
+    cursor: default;
 }
 .show {
     visibility: visible;
@@ -87,6 +88,12 @@ body {
     font-size: 0.5em;
     resize: none;
 }
+.card-title .saveBtn {
+    width: 10%;
+    margin: 0;
+    margin-left: auto;
+    margin-right: 5em;
+}
 
 /*---------------     CARD > SLOT     ----------------*/
 .slot {
@@ -94,6 +101,7 @@ body {
     background-color: #fff;
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid rgb(197, 191, 255);
 }
 .slot:hover .addSlotBtn {
     display: block;
@@ -151,11 +159,13 @@ body {
 .slot .footer > * {
     vertical-align: middle;
 }
-.slot .footer .deleteBtn, .copyBtn{
+.slot .footer .deleteBtn,
+.copyBtn {
     cursor: pointer;
     transition: 0.2s;
 }
-.slot .footer .deleteBtn:hover, .copyBtn:hover{
+.slot .footer .deleteBtn:hover,
+.copyBtn:hover {
     transform: scale(1.1);
     transition: 0.3s;
 }
