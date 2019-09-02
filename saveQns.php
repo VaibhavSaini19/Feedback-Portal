@@ -24,6 +24,9 @@ $conn->query("TRUNCATE TABLE $tableName");
 foreach($_POST as $k=>$v){
     if(strpos($k, 'question') !== false){
         $num = (int) filter_var($k, FILTER_SANITIZE_NUMBER_INT);
+        if ($_POST['question'.$num] == ''){
+            continue;
+        }
         $qn = $_POST['question'.$num];
         $opts = $_POST['response'.$num];
         $qry = "INSERT into $tableName (question";

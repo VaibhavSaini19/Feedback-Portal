@@ -1,3 +1,15 @@
+<?php
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "feedback_portal";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -74,7 +86,7 @@
                     <div class="collapse" id="addDeptForm">
                         <div class="card shadow-md text-center mx-auto">
                             <div class="card-body">
-                                <form action="#" method="GET">
+                                <form action="./addDept.php" method="POST">
                                     <div class="row justify-content-center">
                                         <div class="form-group col">
                                             <label for="course">Department Name</label>
@@ -93,57 +105,34 @@
                         </div>
                     </div>
                     <div class="row m-3 justify-content-around text-center">
+                    <?php
+                    $qry = "SELECT * from department";
+                    $res = $conn->query($qry);
+                    if($res->num_rows > 0){
+                        while($dept = $res->fetch_assoc())
+                        {
+                            echo '
                         <div class="col-3">
                             <div class="card shadow">
                                 <div class="card-header">
                                     <h3>
-                                        SCET
+                                        <u>'.$dept['name'].'</u>
                                     </h3>
                                 </div>
                                 <div class="card-body">
-                                    Description / other info?
+                                    '.$dept['description'].'
                                 </div>
                                 <div class="card-footer">
-                                    <div class="btn btn-primary">
+                                    <a href="./manageDept?dept='.$dept['name'].'" class="btn btn-primary">
                                         <i class="far fa-edit"></i>&nbsp;Manage
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
-                            <div class="card shadow">
-                                <div class="card-header">
-                                    <h3>
-                                        SMCE
-                                    </h3>
-                                </div>
-                                <div class="card-body">
-                                    Description / other info?
-                                </div>
-                                <div class="card-footer">
-                                    <div class="btn btn-primary">
-                                        <i class="far fa-edit"></i>&nbsp;Manage
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="card shadow">
-                                <div class="card-header">
-                                    <h3>
-                                        SHES
-                                    </h3>
-                                </div>
-                                <div class="card-body">
-                                    Description / other info?
-                                </div>
-                                <div class="card-footer">
-                                    <div class="btn btn-primary">
-                                        <i class="far fa-edit"></i>&nbsp;Manage
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ';
+                        }
+					}
+					?>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="category" role="tabpanel" aria-labelledby="category-tab">
@@ -155,7 +144,7 @@
                     <div class="collapse" id="addCatForm">
                         <div class="card shadow-md text-center mx-auto">
                             <div class="card-body">
-                                <form action="#" method="">
+                                <form action="./addCategory.php" method="POST">
                                     <div class="row justify-content-center">
                                         <div class="form-group col-6">
                                             <label for="course">Category Name</label>
@@ -182,9 +171,17 @@
                                         <label for="cat">Category</label>
                                         <select class="form-control" name="cat" id="cat" required>
                                             <option value="" disabled selected hidden>Select Category</option>
-                                            <option value="Student">Student</option>
-                                            <option value="Faculty">Faculty</option>
-                                            <option value="Employee">Employee</option>
+                                            <?php
+                                            $qry = "SELECT * FROM category_list";
+                                            $res = $conn->query($qry);
+                                            if ($res->num_rows > 0){
+                                                while($cat = $res->fetch_assoc()){
+                                                    echo '
+                                            <option value="'.$cat['name'].'">'.$cat['name'].'</option>
+                                                    ';
+                                                }
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -196,8 +193,136 @@
                     </div>                    
                 </div>
                 <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">...</div>
-                <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">...</div>
+                <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
+                    <div class="row justify-content-center">
+                        <div class="btn btn-lg btn-info m-3"  data-toggle="collapse" href="#addLoadForm" role="button" aria-expanded="false" aria-controls="addLoadForm">
+                            <i class="fas fa-plus"></i>&nbsp;Add
+                        </div>
+                    </div>
+                    <div class="collapse" id="addLoadForm">
+                        <div class="card shadow-md text-center mx-auto col-10">
+                            <div class="card-body">
+                                <form action="./addLoad.php" method="POST">
+                                    <div class="row text-left">
+                                        <div class="form-group col-6">
+                                            <label for="department">Department:</label>
+                                            <select class="form-control" name="dept" id="dept" required>
+                                                <option value="" disabled selected hidden>Select Category</option>
+                                                <?php
+                                                $qry = "SELECT * FROM department";
+                                                $res = $conn->query($qry);
+                                                if ($res->num_rows > 0){
+                                                    while($dept = $res->fetch_assoc()){
+                                                        echo '
+                                                <option value="'.$dept['name'].'">'.$dept['name'].'</option>
+                                                        ';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+										</div>
+										<div class="form-group col-6">
+											<label for="faculty">Faculty:</label>
+                                            <input type="text" name="faculty" required="true" id="faculty" class="form-control" placeholder="Enter Faculty name">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="course">Year:</label>
+                                            <select class="form-control" name="year" id="year" required>
+                                            <option value="" disabled selected hidden>Select Year</option>
+                                                <option value="FY">FY</option>
+                                                <option value="SY">SY</option>
+                                                <option value="TY">TY</option>
+                                                <option value="BE">BE</option>
+                                            </select>
+										</div>
+										<div class="form-group col-6">
+											<label for="course">Course:</label>
+                                            <input type="text" name="course" required="true" id="course" class="form-control" placeholder="Enter Course name">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="course">Block:</label>
+                                            <select class="form-control" name="block" id="block" required>
+                                                <option value="" disabled selected hidden>Select Block</option>
+                                                <option value="B1">B1</option>
+                                                <option value="B2">B2</option>
+                                                <option value="B3">B3</option>
+                                                <option value="B4">B4</option>
+                                                <option value="B5">B5</option>
+                                                <option value="B6">B6</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" id="addCatBtn" class="btn btn-success my-2" value="Submit" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3>    
+                                <u>Added faculties</u>
+                            </h3>
+							<table class="table table-bordered table-hover table-striped">
+								<thead class="table-success">
+									<tr>
+										<th scope="col">
+											<button class="btn bg-light text-primary">
+												<strong>Department</strong>
+											</button>
+										</th>
+										<th scope="col">
+											<button class="btn bg-light text-primary">
+												<strong>Year</strong>
+											</button>
+										</th>
+										<th scope="col">
+											<button class="btn bg-light text-primary">
+												<strong>Block</strong>
+											</button>
+										</th>
+										<th scope="col">
+											<button class="btn bg-light text-primary">
+												<strong>Faculty</strong>
+											</button>
+										</th>
+										<th scope="col">
+											<button class="btn bg-light text-primary">
+												<strong>Course</strong>
+											</button>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php
+								$qry = "SELECT * FROM faculty_load";
+								$res = $conn->query($qry);
+								if ($res->num_rows > 0)
+								{
+									while($row = $res->fetch_assoc())
+									{
+										echo '
+									<tr>
+										<td>'.$row['dept'].'</td>
+										<td>'.$row['year'].'</td>
+										<td>'.$row['block'].'</td>
+										<td>'.$row['faculty'].'</td>
+										<td>'.$row['course'].'</td>
+									</tr>
+									';
+									}
+								}
+								?>
+								</tbody>
+							</table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
 </html>
+<?php
+$conn->close();
+?>

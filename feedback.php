@@ -20,7 +20,7 @@ $qry = "SELECT * from " . $tableName;
 // echo $qry;
 $result = $conn->query($qry);
 
-echo '
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -68,11 +68,13 @@ echo '
     <body>
         <div class="container border rounded col-10 mx-auto justify-content-center m-3">
             <div class="row justify-content-end sticky-top">
-                <a href="./index.html" class="btn btn-primary mt-3 mr-3">
+                <a href="./index.php" class="btn btn-primary mt-3 mr-3">
                     <i class="fas fa-home"></i>&nbsp;
                     Home
                 </a>
             </div>
+            <?php
+            echo '
             <form action="./saveQns.php" method="POST">
                 <input type="hidden" name="tableName" id="tableName" value="'.$tableName.'" />
                 <div class="card m-5 mx-auto">
@@ -111,7 +113,7 @@ echo '
                                     </div>
                                     ';
                                 };
-                                }
+                            }
                                 echo '
                                 <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
                                     <i class="fas fa-plus"></i>&nbsp; Add option
@@ -177,12 +179,13 @@ echo '
                         </div>
                         ';
                     }
-                    echo '
+                    ?>
                     </div>
                 </div>
             </form>
         </div>
     </body>
 </html>
-';
+<?php
 $conn->close();
+?>

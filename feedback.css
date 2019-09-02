@@ -129,7 +129,7 @@ body {
     font-size: 1em;
 }
 .slot .options .option .removeBtn {
-    opacity: 0;
+    opacity: 0.1;
     padding: 0;
 }
 .slot .options .option .removeBtn i {
