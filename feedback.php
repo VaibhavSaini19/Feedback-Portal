@@ -106,7 +106,7 @@ $result = $conn->query($qry);
                                     echo '
                                     <div class="option">
                                         <i class="far fa-circle"></i>&nbsp;
-                                        <input type="text" name="response'.$qnNum.'[]" id="response" value="'.$row[$optNum].'" placeholder="option"/>
+                                        <input type="text" name="response'.$qnNum.'[]" class="response" value="'.$row[$optNum].'" placeholder="option"/>
                                         <div class="btn removeBtn" onclick="removeOpt(event)">
                                             <i class="fas fa-times"></i>
                                         </div>
@@ -149,7 +149,7 @@ $result = $conn->query($qry);
                             <div class="options">
                                 <div class="option">
                                     <i class="far fa-circle"></i>&nbsp;
-                                    <input type="text" name="response0[]" id="response" value="" placeholder="Option" />
+                                    <input type="text" name="response0[]" class="response" value="" placeholder="Option" />
                                     <div class="btn removeBtn" onclick="removeOpt(event)">
                                         <i class="fas fa-times"></i>
                                     </div>
