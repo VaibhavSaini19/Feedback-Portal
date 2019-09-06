@@ -89,59 +89,54 @@ $dept = $_GET['dept'];
                                 aria-labelledby="list-form-list">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="" method="POST">
-                                            <?php
-                                            echo '
-                                            <input type="hidden" name="dept" id="dept" value="'.$dept.'">
-                                            ';
-                                            ?>
-                                            <div class="row justify-content-center">
-                                                <div class="form-group col-6">
-                                                    <label for="cat">Category:</label>
-                                                    <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
-                                                        <option value="" hidden disabled selected>Select category</option>
-                                                        <?php
-                                                        $qry = "SELECT * FROM category_list";
-                                                        $res = $conn->query($qry);
-                                                        if ($res->num_rows > 0){
-                                                            while($cat = $res->fetch_assoc()){
-                                                                echo '
-                                                        <option value="'.$cat['name'].'">'.$cat['name'].'</option>
-                                                                ';
-                                                            }
+                                        <?php
+                                        echo '
+                                        <input type="hidden" name="dept" id="dept" value="'.$dept.'">
+                                        ';
+                                        ?>
+                                        <div class="row justify-content-center">
+                                            <div class="form-group col-6">
+                                                <label for="cat">Category:</label>
+                                                <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
+                                                    <option value="" hidden disabled selected>Select category</option>
+                                                    <?php
+                                                    $qry = "SELECT * FROM category_list";
+                                                    $res = $conn->query($qry);
+                                                    if ($res->num_rows > 0){
+                                                        while($cat = $res->fetch_assoc()){
+                                                            echo '
+                                                    <option value="'.$cat['name'].'">'.$cat['name'].'</option>
+                                                            ';
                                                         }
-                                                        ?>
-                                                    </select>
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center border rounded m-2" id="facultyTable">
+                                        </div>
+                                        <div class="justify-content-center d-none" id="formTab">
+                                            <ul class="nav nav-tabs nav-fill" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="theory-tab" data-toggle="tab" href="#theory" role="tab"
+                                                        aria-controls="theory" aria-selected="true">
+                                                        <h4><u>Theory</u></h4>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="lab-tab" data-toggle="tab" href="#lab" role="tab"
+                                                        aria-controls="lab" aria-selected="false">
+                                                        <h4><u>Lab</u></h4>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="myTabContent">
+                                                <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
+                                                </div>
+                                                <div class="tab-pane fade" id="lab" role="tabpanel" aria-labelledby="lab-tab">
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-center border rounded m-2" id="facultyTable">
-                                            </div>
-                                            <div class="justify-content-center d-none" id="formTab">
-                                                <ul class="nav nav-tabs nav-fill" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active" id="theory-tab" data-toggle="tab" href="#theory" role="tab"
-                                                            aria-controls="theory" aria-selected="true">
-                                                            <h4><u>Theory</u></h4>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="lab-tab" data-toggle="tab" href="#lab" role="tab"
-                                                            aria-controls="lab" aria-selected="false">
-                                                            <h4><u>Lab</u></h4>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <div class="tab-content" id="myTabContent">
-                                                    <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
-                                                    </div>
-                                                    <div class="tab-pane fade" id="lab" role="tabpanel" aria-labelledby="lab-tab">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group text-center">
-                                                <input type="submit" id="addDeptBtn" class="btn btn-success" value="Submit" />
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

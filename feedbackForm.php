@@ -1,3 +1,8 @@
+<?php
+$token = "XA1P5WN7F";
+// $token = $_POST['token'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -58,7 +63,7 @@
                             </a>
                         </li>
                     </ul>
-                    <form action="./saveResponse.php" method="POST" id="formTable" class="justify-content-cente align-items-center">
+                    <form action="./saveResponse.php" method="POST" onsubmit="return validate()" id="formTable" class="justify-content-cente align-items-center">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
                             </div>
@@ -76,14 +81,28 @@
     </body>
     <script>
         function loadForm(){
-            $.get("getForm.php", data={type: 'theory', category: 'student', department: 'SCET', year: 'TY', block: 'B5'}, 
+            $.get("getForm.php", data={type: 'theory', category: 'student', department: 'SCET', year: 'TY', block: 'B5', token: "<?php echo $token; ?>"}, 
             function(data, status){
                 $("#theory").html(data);
             });
-            $.get("getForm.php", data={type: 'lab', category: 'student', department: 'SCET', year: 'TY', block: 'B5'}, 
+            $.get("getForm.php", data={type: 'lab', category: 'student', department: 'SCET', year: 'TY', block: 'B5', token: "<?php echo $token; ?>"}, 
             function(data, status){
                 $("#lab").html(data);
             });
+        }
+        function validate(){
+            var check = true;
+            $("input[type=radio]").each(function(e) {
+                var name = $(this).attr("name");
+                if($("input:radio[name="+name+"]:checked").length == 0){
+                    check = false;
+                }
+            });
+            if(!check){
+                alert('Please select one option in each question in both the tabs: Theory & Lab!');
+                return false;
+            }
+            return true;
         }
     </script>
 </html>

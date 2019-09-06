@@ -12,6 +12,11 @@ if ($conn->connect_error) {
 
 $cat = $_GET['category'];
 $type = $_GET['type'];
+if(isset($_GET['token'])){
+    $token = $_GET['token'];
+}else{
+    $token = "";
+}
 
 $conditions = "";
 if(isset($_GET['department']))
@@ -65,7 +70,7 @@ if($res->num_rows > 0){
                 if(isset($row['option'.$i])){
                     $data .= '
                     <td scope="col">
-                        <input type="radio" name="'.$row['id'].'_'.$fac[4].'_'.$fac[6].'" value="'.$i.'" style="transform: scale(1.3);">
+                        <input type="radio" name="'.$row['id'].'_'.$fac[4].'_'.$fac[6].'_'.$type.'_'.$token.'" value="'.(6-$i).'" style="transform: scale(1.3);">
                             &nbsp;'.$row['option'.$i].'
                     </td>';
                 }
