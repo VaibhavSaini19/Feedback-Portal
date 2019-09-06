@@ -22,6 +22,6 @@ if ($conn->query($qry) === TRUE){
 
 $conn->close();
 
-header('Location: ./index.php');
+header('Location: ./index.php#department');
 
 ?>

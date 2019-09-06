@@ -19,24 +19,8 @@ if ($conn->query($qry) === TRUE){
     echo "Error: <br>" . $conn->error;
 }
 
-$qry = "CREATE TABLE $catName (
-    question varchar(100),
-    option1 varchar(50),
-    option2 varchar(50),
-    option3 varchar(50),
-    option4 varchar(50),
-    option5 varchar(50)
-    )";
-
-echo $qry;
-if ($conn->query($qry) === TRUE){
-    echo "New table created successfully";
-} else {
-    echo "Error: <br>" . $conn->error;
-}
-
 $conn->close();
 
-header('Location: ./index.php');
+header('Location: ./index.php#category');
 
 ?>

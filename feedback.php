@@ -14,11 +14,19 @@ if ($conn->connect_error) {
 } 
 // echo "Connected successfully";
 
-$tableName = $_GET['cat'];
-$qry = "SELECT * from " . $tableName;
-// $qry = "SELECT * from " . 'test';
-// echo $qry;
-$result = $conn->query($qry);
+$category = $_GET['cat'];
+
+$qryTheory = "SELECT * from questions
+        WHERE category='$category' AND type='theory'
+        ORDER BY id";
+// echo $qryTheory;
+$resultTheory = $conn->query($qryTheory);
+
+$qryLab = "SELECT * from questions
+        WHERE category='$category' AND type='lab'
+        ORDER BY id";
+// echo $qryLab;
+$resultLab = $conn->query($qryLab);
 
 ?>
 <!DOCTYPE html>
@@ -65,124 +73,255 @@ $result = $conn->query($qry);
         <!-- FontAwesome kit-->
         <script src="https://kit.fontawesome.com/728d1d3dec.js"></script>
     </head>
-    <body>
+    <body onload="showSaveBtn()">
         <div class="container border rounded col-10 mx-auto justify-content-center m-3">
             <div class="row justify-content-end sticky-top">
-                <a href="./index.php" class="btn btn-primary mt-3 mr-3">
+                <a href="./index.php#category" class="btn btn-primary mt-3 mr-3">
                     <i class="fas fa-home"></i>&nbsp;
                     Home
                 </a>
             </div>
-            <?php
-            echo '
-            <form action="./saveQns.php" method="POST">
-                <input type="hidden" name="tableName" id="tableName" value="'.$tableName.'" />
-                <div class="card m-5 mx-auto">
-                    <h3 class="card-title highlight">
-                        <input type="text" name="title" id="title" value="'.$tableName.' Feedback Form"/>
-                        <textarea name="desc" id="desc" placeholder="Form description"></textarea>
-                        <button type="submit" class="btn btn-success saveBtn">
-                            <i class="fas fa-plus"></i>&nbsp;
-                            Save
-                        </button>
-                    </h3>
-                    <div class="card-body" id="sortable">
-                    ';
-                    if ($result->num_rows > 0)
-                    {
-                        $qnNum = 0;
-                        while($row = $result->fetch_assoc()) {
-                            $qnNum += 1;
+            <div class="card m-5 mx-auto">
+                <h3 class="card-title highlight bg-light">
+                    <input type="text" name="title" id="title" value="<?php echo $category;?> Feedback Form"/>
+                    <textarea name="desc" id="desc" placeholder="Form description"></textarea>
+                </h3>
+                <div class="justify-content-center" id="formTab">
+                    <ul class="nav nav-tabs nav-fill" role="tablist" id="myTab">
+                        <li class="nav-item" style="position:relative;">
+                            <a class="nav-link active" id="theory-tab" data-toggle="tab" href="#theory" role="tab"
+                                aria-controls="theory" aria-selected="true">
+                                <h4><u>Theory</u></h4>
+                            </a>
+                            <button form="theoryForm" id="theoryBtn" type="submit" class="btn btn-sm btn-success saveBtn" style="position: absolute; top: 8px; right: 8px;">
+                                <i class="fas fa-plus"></i>&nbsp;
+                                Save
+                            </button>
+                        </li>
+                        <li class="nav-item" style="position:relative;">
+                            <a class="nav-link" id="lab-tab" data-toggle="tab" href="#lab" role="tab"
+                                aria-controls="lab" aria-selected="false">
+                                <h4><u>Lab</u></h4>
+                            </a>
+                            <button form="labForm" id="labBtn" type="submit" class="btn btn-sm btn-success saveBtn" style="position: absolute; top: 8px; right: 8px;">
+                                <i class="fas fa-plus"></i>&nbsp;
+                                Save
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
+                        <?php
                             echo '
-                        <div class="slot highlight">
-                            <div class="question">
-                                <input type="text" name="question'.$qnNum.'" id="question" value="'.$row["question"].'" />
-                            </div>
-                            <div class="options">
+                            <form action="./saveQns.php" method="POST" id="theoryForm">
+                                <input type="hidden" name="cat" id="cat" value="'.$category.'" />
+                                <input type="hidden" name="type" id="type" value="theory" />
+                                <div class="card-body" id="sortable">
                             ';
-                            for($i=1; $i<=5; $i++){
-                                $optNum = 'option'.$i;
-                                if(isset($row[$optNum])){
+                            if ($resultTheory->num_rows > 0)
+                            {
+                                $qnNum = 0;
+                                while($row = $resultTheory->fetch_assoc()) {
+                                    $qnNum += 1;
                                     echo '
-                                    <div class="option">
-                                        <i class="far fa-circle"></i>&nbsp;
-                                        <input type="text" name="response'.$qnNum.'[]" class="response" value="'.$row[$optNum].'" placeholder="option"/>
-                                        <div class="btn removeBtn" onclick="removeOpt(event)">
-                                            <i class="fas fa-times"></i>
+                                    <div class="slot highlight">
+                                        <div class="question">
+                                            <input type="text" name="question'.$qnNum.'" id="question" value="'.$row["question"].'" />
+                                        </div>
+                                        <div class="options">
+                                    ';
+                                    for($i=1; $i<=5; $i++){
+                                        $optNum = 'option'.$i;
+                                        if(isset($row[$optNum])){
+                                            echo '
+                                            <div class="option">
+                                                <i class="far fa-circle"></i>&nbsp;
+                                                <input type="text" name="response'.$qnNum.'[]" class="response" value="'.$row[$optNum].'" placeholder="option"/>
+                                                <div class="btn removeBtn" onclick="removeOpt(event)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            </div>
+                                            ';
+                                        };
+                                    }
+                                        echo '
+                                            <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add option
+                                            </div>
+                                        </div>
+                                        <div class="footer">
+                                            <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add Question
+                                            </div>
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                                <i class="far fa-copy"></i>&nbsp;
+                                            </div>
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                                <i class="fas fa-trash"></i>&nbsp;
+                                            </div>
+                                            <div class="verticalRule"></div>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
+                                                <label class="custom-control-label" for="customSwitch1">
+                                                    Required
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                     ';
-                                };
-                            }
+                                }
+                            }else{
                                 echo '
-                                <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
-                                    <i class="fas fa-plus"></i>&nbsp; Add option
-                                </div>
-                            </div>
-                            <div class="footer">
-                                <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
-                                    <i class="fas fa-plus"></i>&nbsp; Add Question
-                                </div>
-                                <div class="btn modify copyBtn" onclick="copySlot(event)">
-                                    <i class="far fa-copy"></i>&nbsp;
-                                </div>
-                                <div class="btn modify deleteBtn" onclick="removeSlot(event)">
-                                    <i class="fas fa-trash"></i>&nbsp;
-                                </div>
-                                <div class="verticalRule"></div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
-                                    <label class="custom-control-label" for="customSwitch1">
-                                        Required
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                            ';
-                        }
-                    }else{
-                        echo '
-                        <div class="slot highlight">
-                            <div class="question">
-                                <input type="text" name="question0" id="question" placeholder="Question" />
-                            </div>
-                            <div class="options">
-                                <div class="option">
-                                    <i class="far fa-circle"></i>&nbsp;
-                                    <input type="text" name="response0[]" class="response" value="" placeholder="Option" />
-                                    <div class="btn removeBtn" onclick="removeOpt(event)">
-                                        <i class="fas fa-times"></i>
+                                    <div class="slot highlight">
+                                        <div class="question">
+                                            <input type="text" name="question0" id="question" placeholder="Question" />
+                                        </div>
+                                        <div class="options">
+                                            <div class="option">
+                                                <i class="far fa-circle"></i>&nbsp;
+                                                <input type="text" name="response0[]" class="response" value="" placeholder="Option" />
+                                                <div class="btn removeBtn" onclick="removeOpt(event)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            </div>
+                                            <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add option
+                                            </div>
+                                        </div>
+                                        <div class="footer">
+                                            <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add Question
+                                            </div>
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                                <i class="far fa-copy"></i>&nbsp;
+                                            </div>
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                                <i class="fas fa-trash"></i>&nbsp;
+                                            </div>
+                                            <div class="verticalRule"></div>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" />
+                                                <label class="custom-control-label" for="customSwitch1">
+                                                    Required
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
+                                ';
+                            }
+                            echo '
                                 </div>
-                                <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
-                                    <i class="fas fa-plus"></i>&nbsp; Add option
-                                </div>
-                            </div>
-                            <div class="footer">
-                                <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
-                                    <i class="fas fa-plus"></i>&nbsp; Add Question
-                                </div>
-                                <div class="btn modify copyBtn" onclick="copySlot(event)">
-                                    <i class="far fa-copy"></i>&nbsp;
-                                </div>
-                                <div class="btn modify deleteBtn" onclick="removeSlot(event)">
-                                    <i class="fas fa-trash"></i>&nbsp;
-                                </div>
-                                <div class="verticalRule"></div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" />
-                                    <label class="custom-control-label" for="customSwitch1">
-                                        Required
-                                    </label>
-                                </div>
-                            </div>
+                            </form>
+                            ';
+                            ?>
                         </div>
-                        ';
-                    }
-                    ?>
+                        <div class="tab-pane fade" id="lab" role="tabpanel" aria-labelledby="lab-tab">
+                        <?php
+                            echo '
+                            <form action="./saveQns.php" method="POST" id="labForm">
+                                <input type="hidden" name="cat" id="cat" value="'.$category.'" />
+                                <input type="hidden" name="type" id="type" value="lab" />
+                                <div class="card-body" id="sortable">
+                            ';
+                            if ($resultLab->num_rows > 0)
+                            {
+                                $qnNum = 0;
+                                while($row = $resultLab->fetch_assoc()) {
+                                    $qnNum += 1;
+                                    echo '
+                                    <div class="slot highlight">
+                                        <div class="question">
+                                            <input type="text" name="question'.$qnNum.'" id="question" value="'.$row["question"].'" />
+                                        </div>
+                                        <div class="options">
+                                    ';
+                                    for($i=1; $i<=5; $i++){
+                                        $optNum = 'option'.$i;
+                                        if(isset($row[$optNum])){
+                                            echo '
+                                            <div class="option">
+                                                <i class="far fa-circle"></i>&nbsp;
+                                                <input type="text" name="response'.$qnNum.'[]" class="response" value="'.$row[$optNum].'" placeholder="option"/>
+                                                <div class="btn removeBtn" onclick="removeOpt(event)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            </div>
+                                            ';
+                                        };
+                                    }
+                                        echo '
+                                            <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add option
+                                            </div>
+                                        </div>
+                                        <div class="footer">
+                                            <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add Question
+                                            </div>
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                                <i class="far fa-copy"></i>&nbsp;
+                                            </div>
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                                <i class="fas fa-trash"></i>&nbsp;
+                                            </div>
+                                            <div class="verticalRule"></div>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
+                                                <label class="custom-control-label" for="customSwitch1">
+                                                    Required
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    ';
+                                }
+                            }else{
+                                echo '
+                                    <div class="slot highlight">
+                                        <div class="question">
+                                            <input type="text" name="question0" id="question" placeholder="Question" />
+                                        </div>
+                                        <div class="options">
+                                            <div class="option">
+                                                <i class="far fa-circle"></i>&nbsp;
+                                                <input type="text" name="response0[]" class="response" value="" placeholder="Option" />
+                                                <div class="btn removeBtn" onclick="removeOpt(event)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            </div>
+                                            <div class="btn btn-outline-info addOptBtn show" onclick="addOption(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add option
+                                            </div>
+                                        </div>
+                                        <div class="footer">
+                                            <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
+                                                <i class="fas fa-plus"></i>&nbsp; Add Question
+                                            </div>
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                                <i class="far fa-copy"></i>&nbsp;
+                                            </div>
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                                <i class="fas fa-trash"></i>&nbsp;
+                                            </div>
+                                            <div class="verticalRule"></div>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" />
+                                                <label class="custom-control-label" for="customSwitch1">
+                                                    Required
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ';
+                            }
+                            echo '
+                                </div>
+                            </form>
+                            ';
+                            ?>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </body>
 </html>

@@ -3,6 +3,23 @@ $(function() {
     $("#sortable").disableSelection();
 });
 
+function showSaveBtn(){
+    // console.log($("#theory-tab").hasClass("active"));
+    // console.log($("#lab-tab").hasClass("active"));
+    // if($("#theory-tab").hasClass("active")){
+    //     // console.log("th");
+    //     $("#theoryBtn").show();
+    // }else{
+    //     $("#theoryBtn").hide();
+    // }
+    // if($("#lab-tab").hasClass("active")){
+    //     // console.log("lab");
+    //     $("#labBtn").show();
+    // }else{
+    //     $("#labBtn").hide();
+    // }
+}
+
 function checkOptLen(slotElement) {
     // console.log(slotElement);
     optsLen = slotElement.getElementsByClassName("option").length;

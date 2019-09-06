@@ -47,8 +47,23 @@ if ($conn->connect_error) {
             integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
             crossorigin="anonymous"
         ></script>
+
+        
+        <script>
+            function showActive(){
+                var url = (window.location.href).toString();
+                var tag = url.split("#")[1];
+                // alert(tag);
+                if(tag){
+                    $(".nav-link").removeClass("active");
+                    $("#"+tag+'-tab').addClass("active");
+                    $(".tab-pane").removeClass("show active");
+                    $("#"+tag).addClass("show active");
+                }
+            }
+        </script>
     </head>
-    <body>
+    <body onload="showActive()">
         <div class="container col-10 shadow-lg border rounded m-3 mx-auto p-3">
             <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                 <li class="nav-item">
@@ -72,7 +87,7 @@ if ($conn->connect_error) {
                 <li class="nav-item">
                     <a class="nav-link" id="load-tab" data-toggle="tab" href="#load" role="tab"
                         aria-controls="load" aria-selected="false">
-                        Faculty load
+                        Load distribution
                     </a>
                 </li>
             </ul>
@@ -161,7 +176,7 @@ if ($conn->connect_error) {
                     <div class="card shadow-md text-center mx-auto">
                         <div class="card-header">
                             <h3>
-                                Create form for:
+                                Modify form for:
                             </h3>
                         </div>
                         <div class="card-body">
@@ -186,7 +201,7 @@ if ($conn->connect_error) {
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" id="addCatBtn" class="btn btn-success my-2" value="Create" />
+                                    <input type="submit" id="addCatBtn" class="btn btn-success my-2" value="Submit" />
                                 </div>
                             </form>
                         </div>
@@ -204,10 +219,10 @@ if ($conn->connect_error) {
                             <div class="card-body">
                                 <form action="./addLoad.php" method="POST">
                                     <div class="row text-left">
-                                        <div class="form-group col-6">
+                                        <div class="form-group col-4">
                                             <label for="department">Department:</label>
                                             <select class="form-control" name="dept" id="dept" required>
-                                                <option value="" disabled selected hidden>Select Category</option>
+                                                <option value="" disabled selected hidden>Select Department</option>
                                                 <?php
                                                 $qry = "SELECT * FROM department";
                                                 $res = $conn->query($qry);
@@ -221,11 +236,15 @@ if ($conn->connect_error) {
                                                 ?>
                                             </select>
 										</div>
-										<div class="form-group col-6">
+										<div class="form-group col-5">
 											<label for="faculty">Faculty:</label>
                                             <input type="text" name="faculty" required="true" id="faculty" class="form-control" placeholder="Enter Faculty name">
                                         </div>
-                                        <div class="form-group col-6">
+										<div class="form-group col">
+											<label for="fac_abbr">Faculty abbreviation:</label>
+                                            <input type="text" name="fac_abbr" required="true" id="fac_abbr" class="form-control" placeholder="Faculty abbr">
+                                        </div>
+                                        <div class="form-group col-4">
                                             <label for="course">Year:</label>
                                             <select class="form-control" name="year" id="year" required>
                                             <option value="" disabled selected hidden>Select Year</option>
@@ -235,11 +254,15 @@ if ($conn->connect_error) {
                                                 <option value="BE">BE</option>
                                             </select>
 										</div>
-										<div class="form-group col-6">
+										<div class="form-group col-5">
 											<label for="course">Course:</label>
                                             <input type="text" name="course" required="true" id="course" class="form-control" placeholder="Enter Course name">
                                         </div>
-                                        <div class="form-group col-6">
+										<div class="form-group col">
+											<label for="course_abbr">Course abbreviation:</label>
+                                            <input type="text" name="course_abbr" required="true" id="course_abbr" class="form-control" placeholder="Course abbr">
+                                        </div>
+                                        <div class="form-group col-4">
                                             <label for="course">Block:</label>
                                             <select class="form-control" name="block" id="block" required>
                                                 <option value="" disabled selected hidden>Select Block</option>
@@ -250,6 +273,13 @@ if ($conn->connect_error) {
                                                 <option value="B5">B5</option>
                                                 <option value="B6">B6</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group col">
+                                            <label for="course_type">Course type:</label>
+                                            <div class="row justicy-content-center align-items-center">
+                                                <input type="radio" name="course_type" value="Theory"class="mx-3" style="transform: scale(1.5);" id="theory" placeholder="Course abbr">Theory
+                                                <input type="radio" name="course_type" value="Lab"class="mx-3" style="transform: scale(1.5);" id="lab" placeholder="Course abbr">Lab
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -292,11 +322,16 @@ if ($conn->connect_error) {
 												<strong>Course</strong>
 											</button>
 										</th>
+										<th scope="col">
+											<button class="btn bg-light text-primary">
+												<strong>Type</strong>
+											</button>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 								<?php
-								$qry = "SELECT * FROM faculty_load";
+								$qry = "SELECT * FROM load_distribution";
 								$res = $conn->query($qry);
 								if ($res->num_rows > 0)
 								{
@@ -309,6 +344,7 @@ if ($conn->connect_error) {
 										<td>'.$row['block'].'</td>
 										<td>'.$row['faculty'].'</td>
 										<td>'.$row['course'].'</td>
+										<td>'.$row['type'].'</td>
 									</tr>
 									';
 									}
