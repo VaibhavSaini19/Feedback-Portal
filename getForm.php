@@ -44,7 +44,7 @@ $qry = "SELECT * FROM questions
 $res = $conn->query($qry);
 
 $data = '
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-responsive-sm table-bordered">
     <tbody>';
 if($res->num_rows > 0){
     while($row = $res->fetch_assoc()){
@@ -79,6 +79,12 @@ if($res->num_rows > 0){
         </tr>';
         }
     }
+}else{
+    $data .= ' 
+    <tr>
+        <td colspan="6">No Questions to display</td>
+    </tr>
+    ';
 }
 $data .= ' 
     </tbody>

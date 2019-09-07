@@ -75,7 +75,7 @@ $dept = $_GET['dept'];
                         <div class="list-group sticky-top" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action active" id="list-form-list" 
                                 data-toggle="list" href="#list-form" role="tab" aria-controls="form">
-                                Generate form
+                                Faculty & form
                             </a>
                             <a class="list-group-item list-group-item-action" id="list-results-list" 
                                 data-toggle="list" href="#list-results" role="tab" aria-controls="results">
@@ -163,21 +163,10 @@ $dept = $_GET['dept'];
         });
 
         $("#formTab").removeClass("d-none");
-
-        if(cat != 'Student'){
-            $("#year").prop('disabled', true);
-            $("#block").prop('disabled', true);
-            $("#facultyTable").hide();
-        }else{
-            $("#year").prop('disabled', false);
-            $("#block").prop('disabled', false);
-            $("#facultyTable").show();
-        }
     }
 
     function showFaculty(){
         var department = "<?php echo $dept; ?>";
-        
         $.get("getFaculty.php", data={department: department}, function(data, status){
             $("#facultyTable").html(data);
         });

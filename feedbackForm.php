@@ -81,7 +81,7 @@ $token = "XA1P5WN7F";
     </body>
     <script>
         function loadForm(){
-            $.get("getForm.php", data={type: 'theory', category: 'student', department: 'SCET', year: 'TY', block: 'B5', token: "<?php echo $token; ?>"}, 
+            $.get("getForm.php", data={type: 'theory', category: 'Student', department: 'SCET', year: 'TY', block: 'B5', token: "<?php echo $token; ?>"}, 
             function(data, status){
                 $("#theory").html(data);
             });

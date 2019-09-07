@@ -11,9 +11,14 @@ if ($conn->connect_error) {
 
 $deptName = $_POST['deptName'];
 $desc = $_POST['desc'];
+$uname = $_POST['uname'];
+$password = $_POST['password'];
 
-$qry = "INSERT INTO department VALUES ('$deptName', '$desc')";
-echo $qry;
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+
+$qry = "INSERT INTO department VALUES ('$deptName', '$desc', '$uname', '$hashed_password')";
+// echo $qry;
 if ($conn->query($qry) === TRUE){
     echo "New record created successfully";
 } else {

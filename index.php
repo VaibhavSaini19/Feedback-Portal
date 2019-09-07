@@ -99,20 +99,30 @@ if ($conn->connect_error) {
                         </div>
                     </div>
                     <div class="collapse" id="addDeptForm">
-                        <div class="card shadow-md text-center mx-auto">
+                        <div class="card shadow-md mx-auto">
                             <div class="card-body">
                                 <form action="./addDept.php" method="POST">
-                                    <div class="row justify-content-center">
+                                    <div class="row mx-5">
                                         <div class="form-group col">
                                             <label for="course">Department Name</label>
                                             <input type="text" name="deptName" required="true" id="deptName" class="form-control" placeholder="Enter department name">
                                         </div>
                                         <div class="form-group col">
+                                            <label for="uname">Admin Username</label>
+                                            <input type="text" name="uname" required="true" id="uname" class="form-control" placeholder="Enter Admin Username">
+                                        </div>
+                                    </div>
+                                    <div class="row mx-5">
+                                        <div class="form-group col">
                                             <label for="description">Description</label>
                                             <textarea name="desc" id="desc" class="col border rounded" placeholder="Enter description of department..."></textarea>
                                         </div>
+                                        <div class="form-group col">
+                                            <label for="password">Admin Password</label>
+                                            <input type="password" name="password" required="true" id="password" class="form-control" placeholder="Enter password">
+                                        </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group text-center">
                                         <input type="submit" id="addDeptBtn" class="btn btn-success my-2" value="Submit" />
                                     </div>
                                 </form>
@@ -201,7 +211,7 @@ if ($conn->connect_error) {
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" id="addCatBtn" class="btn btn-success my-2" value="Submit" />
+                                    <input type="submit" id="CatBtn" class="btn btn-success my-2" value="Submit" />
                                 </div>
                             </form>
                         </div>
@@ -242,7 +252,7 @@ if ($conn->connect_error) {
                                         </div>
 										<div class="form-group col">
 											<label for="fac_abbr">Faculty abbreviation:</label>
-                                            <input type="text" name="fac_abbr" required="true" id="fac_abbr" class="form-control" placeholder="Faculty abbr">
+                                            <input type="text" name="fac_abbr" maxlength="4" required="true" id="fac_abbr" class="form-control" placeholder="Faculty abbr">
                                         </div>
                                         <div class="form-group col-4">
                                             <label for="course">Year:</label>
@@ -260,7 +270,7 @@ if ($conn->connect_error) {
                                         </div>
 										<div class="form-group col">
 											<label for="course_abbr">Course abbreviation:</label>
-                                            <input type="text" name="course_abbr" required="true" id="course_abbr" class="form-control" placeholder="Course abbr">
+                                            <input type="text" name="course_abbr" maxlength="5" required="true" id="course_abbr" class="form-control" placeholder="Course abbr">
                                         </div>
                                         <div class="form-group col-4">
                                             <label for="course">Block:</label>
@@ -283,7 +293,7 @@ if ($conn->connect_error) {
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <input type="submit" id="addCatBtn" class="btn btn-success my-2" value="Submit" />
+                                        <input type="submit" id="addFacBtn" class="btn btn-success my-2" value="Submit" />
                                     </div>
                                 </form>
                             </div>
