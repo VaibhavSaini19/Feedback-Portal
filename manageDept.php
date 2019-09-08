@@ -27,7 +27,7 @@ $dept = $_GET['dept'];
 
     <!-- FontAwesome kit -->
     <script src="https://kit.fontawesome.com/728d1d3dec.js"></script>
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <!-- Popper.JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
@@ -81,6 +81,10 @@ $dept = $_GET['dept'];
                                 data-toggle="list" href="#list-results" role="tab" aria-controls="results">
                                 Results
                             </a>
+                            <a class="list-group-item list-group-item-action" id="list-results-list" 
+                                data-toggle="list" href="#list-edit" role="tab" aria-controls="edit">
+                                Edit Dept. info
+                            </a>
                         </div>
                     </div>
                     <div class="col">
@@ -96,7 +100,7 @@ $dept = $_GET['dept'];
                                         ?>
                                         <div class="row justify-content-center">
                                             <div class="form-group col-6">
-                                                <label for="cat">Category:</label>
+                                                <label for="cat">Form Category:</label>
                                                 <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
                                                     <option value="" hidden disabled selected>Select category</option>
                                                     <?php
@@ -142,7 +146,49 @@ $dept = $_GET['dept'];
                             </div>
                             <div class="tab-pane fade" id="list-results" role="tabpanel" 
                                 aria-labelledby="list-results-list">
-                                ...
+                                <div class="card">
+                                    <div class="card-body"></div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-edit" role="tabpanel" 
+                                aria-labelledby="list-edit-list">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <?php
+                                            $qry = "SELECT * FROM department
+                                                    WHERE name='$dept'";
+                                            $ans = $conn->query($qry);
+                                            $res = $ans->fetch_array();
+                                        ?>
+                                        <form action="./updateDept.php" method="POST">
+                                            <input type="hidden" name="deptOld" id="deptOld" value="<?php echo $res['name'] ?>">
+                                            <input type="hidden" name="unameOld" id="unameOld" value="<?php echo $res['admin'] ?>">
+                                            <div class="row mx-5">
+                                                <div class="form-group col">
+                                                    <label for="course">Department Name</label>
+                                                    <input type="text" name="deptNew" value="<?php echo $res['name'] ?>" required="true" id="deptName" class="form-control" placeholder="Enter department name">
+                                                </div>
+                                                <div class="form-group col">
+                                                    <label for="uname">Admin Username</label>
+                                                    <input type="text" name="unameNew" value="<?php echo $res['admin'] ?>" required="true" id="uname" class="form-control" placeholder="Enter Admin Username">
+                                                </div>
+                                            </div>
+                                            <div class="row mx-5">
+                                                <div class="form-group col">
+                                                    <label for="description">Description</label>
+                                                    <textarea name="desc" id="desc" class="col border rounded" placeholder="Enter description of department..."><?php echo $res['description'] ?></textarea>
+                                                </div>
+                                                <div class="form-group col">
+                                                    <label for="password">Admin Password</label>
+                                                    <input type="password" name="password" required="true" id="password" class="form-control" placeholder="Enter New password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center">
+                                                <input type="submit" id="updateDeptBtn" class="btn btn-success" value="Update" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -167,7 +213,7 @@ $dept = $_GET['dept'];
 
     function showFaculty(){
         var department = "<?php echo $dept; ?>";
-        $.get("getFaculty.php", data={department: department}, function(data, status){
+        $.get("getFaculty.php", data={modify: "no", department: department}, function(data, status){
             $("#facultyTable").html(data);
         });
     }

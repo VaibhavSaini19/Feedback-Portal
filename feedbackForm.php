@@ -1,6 +1,30 @@
 <?php
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "feedback_portal";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 $token = "XA1P5WN7F";
+$dept = 'SCET';
+$year = 'FY';
+$block = 'B2';
+
 // $token = $_POST['token'];
+
+// $qry = "SELECT * FROM student_tokens
+//         WHERE token='$token'";
+// $res = $conn->query($qry)->fetch_array();
+
+// $dept = $res['dept'];
+// $year = $res['year'];
+// $block = $res['block'];
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +68,7 @@ $token = "XA1P5WN7F";
         <div class="card">
             <div class="card-header">
                 <h2 class="text-primary">
-                    Feedback Form
+                    Feedback Form:
                 </h2>
             </div>
             <div class="card-body">
@@ -81,11 +105,11 @@ $token = "XA1P5WN7F";
     </body>
     <script>
         function loadForm(){
-            $.get("getForm.php", data={type: 'theory', category: 'Student', department: 'SCET', year: 'TY', block: 'B5', token: "<?php echo $token; ?>"}, 
+            $.get("getForm.php", data={type: 'theory', category: 'Student', department: "<?php echo $dept; ?>", year: "<?php echo $year; ?>", block: "<?php echo $block; ?>", token: "<?php echo $token; ?>"}, 
             function(data, status){
                 $("#theory").html(data);
             });
-            $.get("getForm.php", data={type: 'lab', category: 'student', department: 'SCET', year: 'TY', block: 'B5', token: "<?php echo $token; ?>"}, 
+            $.get("getForm.php", data={type: 'lab', category: 'student', department: "<?php echo $dept; ?>", year: "<?php echo $year; ?>", block: "<?php echo $block; ?>", token: "<?php echo $token; ?>"},  
             function(data, status){
                 $("#lab").html(data);
             });

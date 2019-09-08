@@ -70,9 +70,12 @@ if($res->num_rows > 0){
                 if(isset($row['option'.$i])){
                     $data .= '
                     <td scope="col">
-                        <input type="radio" name="'.$row['id'].'_'.$fac[4].'_'.$fac[6].'_'.$type.'_'.$token.'" value="'.(6-$i).'" style="transform: scale(1.3);">
-                            &nbsp;'.$row['option'.$i].'
-                    </td>';
+                        <label style="display: block; cursor: pointer;">
+                            <input type="radio" name="'.$row['id'].'_'.$fac[4].'_'.$fac[6].'_'.$type.'_'.$token.'" value="'.(6-$i).'" style="transform: scale(1.3);">
+                                &nbsp;'.$row['option'.$i].'
+                        </label>
+                    </td>
+                    ';
                 }
             }
             $data .= '

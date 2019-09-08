@@ -22,11 +22,9 @@ if ($conn->connect_error) {
 
         <!-- FontAwesome kit -->
         <script src="https://kit.fontawesome.com/728d1d3dec.js"></script>
-        <!-- jQuery CDN - Slim version (=without AJAX) -->
+        <!-- jQuery CDN -->
         <script
-            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
         ></script>
         <!-- Popper.JS -->
         <script
@@ -48,22 +46,8 @@ if ($conn->connect_error) {
             crossorigin="anonymous"
         ></script>
 
-        
-        <script>
-            function showActive(){
-                var url = (window.location.href).toString();
-                var tag = url.split("#")[1];
-                // alert(tag);
-                if(tag){
-                    $(".nav-link").removeClass("active");
-                    $("#"+tag+'-tab').addClass("active");
-                    $(".tab-pane").removeClass("show active");
-                    $("#"+tag).addClass("show active");
-                }
-            }
-        </script>
     </head>
-    <body onload="showActive()">
+    <body onload="showActive(); showFaculty()">
         <div class="container col-10 shadow-lg border rounded m-3 mx-auto p-3">
             <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                 <li class="nav-item">
@@ -255,7 +239,7 @@ if ($conn->connect_error) {
                                             <input type="text" name="fac_abbr" maxlength="4" required="true" id="fac_abbr" class="form-control" placeholder="Faculty abbr">
                                         </div>
                                         <div class="form-group col-4">
-                                            <label for="course">Year:</label>
+                                            <label for="year">Year:</label>
                                             <select class="form-control" name="year" id="year" required>
                                             <option value="" disabled selected hidden>Select Year</option>
                                                 <option value="FY">FY</option>
@@ -273,7 +257,7 @@ if ($conn->connect_error) {
                                             <input type="text" name="course_abbr" maxlength="5" required="true" id="course_abbr" class="form-control" placeholder="Course abbr">
                                         </div>
                                         <div class="form-group col-4">
-                                            <label for="course">Block:</label>
+                                            <label for="block">Block:</label>
                                             <select class="form-control" name="block" id="block" required>
                                                 <option value="" disabled selected hidden>Select Block</option>
                                                 <option value="B1">B1</option>
@@ -300,74 +284,109 @@ if ($conn->connect_error) {
                         </div>
                     </div>
                     <div class="card text-center">
-                        <div class="card-body">
+                        <div class="card-header">
                             <h3>    
-                                <u>Added faculties</u>
+                                <u>Added faculties:</u>
                             </h3>
-							<table class="table table-bordered table-hover table-striped">
-								<thead class="table-success">
-									<tr>
-										<th scope="col">
-											<button class="btn bg-light text-primary">
-												<strong>Department</strong>
-											</button>
-										</th>
-										<th scope="col">
-											<button class="btn bg-light text-primary">
-												<strong>Year</strong>
-											</button>
-										</th>
-										<th scope="col">
-											<button class="btn bg-light text-primary">
-												<strong>Block</strong>
-											</button>
-										</th>
-										<th scope="col">
-											<button class="btn bg-light text-primary">
-												<strong>Faculty</strong>
-											</button>
-										</th>
-										<th scope="col">
-											<button class="btn bg-light text-primary">
-												<strong>Course</strong>
-											</button>
-										</th>
-										<th scope="col">
-											<button class="btn bg-light text-primary">
-												<strong>Type</strong>
-											</button>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-								<?php
-								$qry = "SELECT * FROM load_distribution";
-								$res = $conn->query($qry);
-								if ($res->num_rows > 0)
-								{
-									while($row = $res->fetch_assoc())
-									{
-										echo '
-									<tr>
-										<td>'.$row['dept'].'</td>
-										<td>'.$row['year'].'</td>
-										<td>'.$row['block'].'</td>
-										<td>'.$row['faculty'].'</td>
-										<td>'.$row['course'].'</td>
-										<td>'.$row['type'].'</td>
-									</tr>
-									';
-									}
-								}
-								?>
-								</tbody>
-							</table>
                         </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col">
+                                    <label for="department">Department:</label>
+                                    <select class="form-control" name="deptFilter" id="deptFilter" required onchange="showFaculty()">
+                                        <option value="" selected>Select Department</option>
+                                        <?php
+                                        $qry = "SELECT * FROM department";
+                                        $res = $conn->query($qry);
+                                        if ($res->num_rows > 0){
+                                            while($dept = $res->fetch_assoc()){
+                                                echo '
+                                        <option value="'.$dept['name'].'">'.$dept['name'].'</option>
+                                                ';
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="year">Year:</label>
+                                    <select class="form-control" name="year" id="yearFilter" onchange="showFaculty()">
+                                    <option value="" selected>Select Year</option>
+                                        <option value="FY">FY</option>
+                                        <option value="SY">SY</option>
+                                        <option value="TY">TY</option>
+                                        <option value="BE">BE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="block">Block:</label>
+                                    <select class="form-control" name="blockFilter" id="blockFilter" onchange="showFaculty()">
+                                    <option value="" selected>Select Block</option>
+                                        <option value="B1">B1</option>
+                                        <option value="B2">B2</option>
+                                        <option value="B3">B3</option>
+                                        <option value="B4">B4</option>
+                                        <option value="B5">B5</option>
+                                        <option value="B6">B6</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="course">Course:</label>
+                                    <select class="form-control" name="courseFilter" id="courseFilter" onchange="showFaculty()">
+                                        <option value="" selected>Select Course</option>
+                                        <?php
+                                        $qry = "SELECT distinct(course) FROM load_distribution";
+                                        $res = $conn->query($qry);
+                                        if ($res->num_rows > 0){
+                                            while($row = $res->fetch_assoc()){
+                                                echo '
+                                        <option value="'.$row['course'].'">'.$row['course'].'</option>
+                                                ';
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="type">Type:</label>
+                                    <select class="form-control" name="typeFilter" id="typeFilter" onchange="showFaculty()">
+                                    <option value="" selected>Select Type</option>
+                                        <option value="Theory">Theory</option>
+                                        <option value="Lab">Lab</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="facultyTable"></div>
+						</div>
                     </div>
                 </div>
             </div>
         </div>
     </body>
+    <script>
+        function showActive(){
+            var url = (window.location.href).toString();
+            var tag = url.split("#")[1];
+            // alert(tag);
+            if(tag){
+                $(".nav-link").removeClass("active");
+                $("#"+tag+'-tab').addClass("active");
+                $(".tab-pane").removeClass("show active");
+                $("#"+tag).addClass("show active");
+            }
+        }
+
+        function showFaculty(){
+            var dept = $("#deptFilter").val();
+            var year = $("#yearFilter").val();
+            var block = $("#blockFilter").val();
+            var course = $("#courseFilter").val();
+            var type = $("#typeFilter").val();
+            $.get("getFaculty.php", data={modify: "no", department: dept, year: year, block: block, course: course, type: type}, function(data, status){
+                $("#facultyTable").html(data);
+            });
+        }
+    </script>
 </html>
 <?php
 $conn->close();

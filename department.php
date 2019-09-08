@@ -87,7 +87,7 @@ $dept = $_GET['dept'];
                                     <div class="card-body justify-content-center">
                                         <div class="row text-center">
                                             <div class="form-group col-6">
-                                                <label for="cat">Category:</label>
+                                                <label for="cat">Form Category:</label>
                                                 <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
                                                     <option value="" hidden disabled selected>Select category</option>
                                                     <?php
@@ -245,7 +245,7 @@ $dept = $_GET['dept'];
 
     function showFaculty(){
         var department = "<?php echo $dept; ?>";
-        $.get("getFaculty.php", data={department: department}, function(data, status){
+        $.get("getFaculty.php", data={modify: "yes", department: department}, function(data, status){
             $("#facultyTable").html(data);
         });
     }
@@ -275,7 +275,8 @@ $dept = $_GET['dept'];
                 // alert("Record deleted successfully");
                 alert(data);
             });
-            window.location.reload();
+            // window.location.reload();
+            showFaculty();
         }
     });
 
