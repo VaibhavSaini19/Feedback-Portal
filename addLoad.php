@@ -30,10 +30,6 @@ if ($conn->query($qry) === TRUE){
 
 $conn->close();
 
-if(strpos($_SERVER['REQUEST_URI'], "index") !== false){
-    header('Location: ./index.php#load');
-}else{
-    header('Location: ./department.php?dept='.$dept);
-}
+header('Location: ./department.php?dept='.$dept);
 
 ?>
