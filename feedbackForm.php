@@ -12,8 +12,8 @@ if ($conn->connect_error) {
 
 $token = "XA1P5WN7F";
 $dept = 'SCET';
-$year = 'FY';
-$block = 'B2';
+$year = 'SY';
+$block = 'B5';
 
 // $token = $_POST['token'];
 
@@ -29,41 +29,28 @@ $block = 'B2';
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Feedback Form</title>
 
-        <!-- Our Custom CSS -->
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Feedback Form</title>
 
-        <!-- FontAwesome kit -->
-        <script src="https://kit.fontawesome.com/728d1d3dec.js"></script>
-        <!-- jQuery CDN  -->
-        <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-        ></script>
-        <!-- Popper.JS -->
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-            integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-            crossorigin="anonymous"
-        ></script>
-        <!-- Bootstrap CSS CDN -->
-        <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-            integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-            crossorigin="anonymous"
-        />
-        <!-- Bootstrap JS -->
-        <script
-            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
-            integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-            crossorigin="anonymous"
-        ></script>
-    </head>
-    <body onload="loadForm()">
+    <!-- Our Custom CSS -->
+
+    <!-- FontAwesome kit -->
+    <script src="https://kit.fontawesome.com/728d1d3dec.js"></script>
+    <!-- jQuery CDN  -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</head>
+
+<body onload="loadForm()">
     <div class="container col-10 shadow-lg border rounded m-3 mx-auto p-3">
         <div class="card">
             <div class="card-header">
@@ -75,14 +62,12 @@ $block = 'B2';
                 <div class="justify-content-center" id="formTab">
                     <ul class="nav nav-tabs nav-fill" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="theory-tab" data-toggle="tab" href="#theory" role="tab"
-                                aria-controls="theory" aria-selected="true">
+                            <a class="nav-link active" id="theory-tab" data-toggle="tab" href="#theory" role="tab" aria-controls="theory" aria-selected="true">
                                 <h4><u>Theory</u></h4>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="lab-tab" data-toggle="tab" href="#lab" role="tab"
-                                aria-controls="lab" aria-selected="false">
+                            <a class="nav-link" id="lab-tab" data-toggle="tab" href="#lab" role="tab" aria-controls="lab" aria-selected="false">
                                 <h4><u>Lab</u></h4>
                             </a>
                         </li>
@@ -102,31 +87,47 @@ $block = 'B2';
             </div>
         </div>
     </div>
-    </body>
-    <script>
-        function loadForm(){
-            $.get("getForm.php", data={type: 'theory', category: 'Student', department: "<?php echo $dept; ?>", year: "<?php echo $year; ?>", block: "<?php echo $block; ?>", token: "<?php echo $token; ?>"}, 
-            function(data, status){
+</body>
+<script>
+    function loadForm() {
+        $.get("getForm.php", data = {
+                type: 'theory',
+                category: 'Student',
+                department: "<?php echo $dept; ?>",
+                year: "<?php echo $year; ?>",
+                block: "<?php echo $block; ?>",
+                token: "<?php echo $token; ?>"
+            },
+            function(data, status) {
                 $("#theory").html(data);
             });
-            $.get("getForm.php", data={type: 'lab', category: 'student', department: "<?php echo $dept; ?>", year: "<?php echo $year; ?>", block: "<?php echo $block; ?>", token: "<?php echo $token; ?>"},  
-            function(data, status){
+        $.get("getForm.php", data = {
+                type: 'lab',
+                category: 'student',
+                department: "<?php echo $dept; ?>",
+                year: "<?php echo $year; ?>",
+                block: "<?php echo $block; ?>",
+                token: "<?php echo $token; ?>"
+            },
+            function(data, status) {
                 $("#lab").html(data);
             });
-        }
-        function validate(){
-            var check = true;
-            $("input[type=radio]").each(function(e) {
-                var name = $(this).attr("name");
-                if($("input:radio[name="+name+"]:checked").length == 0){
-                    check = false;
-                }
-            });
-            if(!check){
-                alert('Please select one option in each question in both the tabs: Theory & Lab!');
-                return false;
+    }
+
+    function validate() {
+        var check = true;
+        $("input[type=radio]").each(function(e) {
+            var name = $(this).attr("name");
+            if ($("input:radio[name=" + name + "]:checked").length == 0) {
+                check = false;
             }
-            return true;
+        });
+        if (!check) {
+            alert('Please select one option in each question in both the tabs: Theory & Lab!');
+            return false;
         }
-    </script>
+        return true;
+    }
+</script>
+
 </html>
