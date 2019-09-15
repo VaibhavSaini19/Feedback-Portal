@@ -1,13 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "feedback_portal";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
+require_once './DB_connection.php';
 
 $dept = $_POST['dept'];
 $year = $_POST['year'];

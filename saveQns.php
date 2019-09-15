@@ -1,20 +1,9 @@
 <?php
 
-var_dump($_POST);
+// var_dump($_POST);
 
-// echo count($_POST);
+require_once './DB_connection.php';
 
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "feedback_portal";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
 
 $category = $_POST['cat'];
 $type = $_POST['type'];

@@ -1,18 +1,5 @@
 <?php
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "feedback_portal";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
-// echo "Connected successfully";
+require_once './DB_connection.php';
 
 $category = $_GET['cat'];
 
@@ -153,10 +140,12 @@ $resultLab = $conn->query($qryLab);
                                             <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
                                                 <i class="fas fa-plus"></i>&nbsp; Add Question
                                             </div>
-                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)" 
+                                            data-toggle="tooltip" data-placement="top" title="Duplicate">
                                                 <i class="far fa-copy"></i>&nbsp;
                                             </div>
-                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)"
+                                            data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="fas fa-trash"></i>&nbsp;
                                             </div>
                                             <div class="verticalRule"></div>
@@ -192,15 +181,17 @@ $resultLab = $conn->query($qryLab);
                                             <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
                                                 <i class="fas fa-plus"></i>&nbsp; Add Question
                                             </div>
-                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)" 
+                                            data-toggle="tooltip" data-placement="top" title="Duplicate">
                                                 <i class="far fa-copy"></i>&nbsp;
                                             </div>
-                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)"
+                                            data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="fas fa-trash"></i>&nbsp;
                                             </div>
                                             <div class="verticalRule"></div>
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" />
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
                                                 <label class="custom-control-label" for="customSwitch1">
                                                     Required
                                                 </label>
@@ -258,10 +249,12 @@ $resultLab = $conn->query($qryLab);
                                             <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
                                                 <i class="fas fa-plus"></i>&nbsp; Add Question
                                             </div>
-                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)" 
+                                            data-toggle="tooltip" data-placement="top" title="Duplicate">
                                                 <i class="far fa-copy"></i>&nbsp;
                                             </div>
-                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)"
+                                            data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="fas fa-trash"></i>&nbsp;
                                             </div>
                                             <div class="verticalRule"></div>
@@ -297,15 +290,17 @@ $resultLab = $conn->query($qryLab);
                                             <div class="btn btn-outline-primary addSlotBtn" onclick="addSlot(event)">
                                                 <i class="fas fa-plus"></i>&nbsp; Add Question
                                             </div>
-                                            <div class="btn modify copyBtn" onclick="copySlot(event)">
+                                            <div class="btn modify copyBtn" onclick="copySlot(event)" 
+                                            data-toggle="tooltip" data-placement="top" title="Duplicate">
                                                 <i class="far fa-copy"></i>&nbsp;
                                             </div>
-                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)">
+                                            <div class="btn modify deleteBtn" onclick="removeSlot(event)"
+                                            data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="fas fa-trash"></i>&nbsp;
                                             </div>
                                             <div class="verticalRule"></div>
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" />
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
                                                 <label class="custom-control-label" for="customSwitch1">
                                                     Required
                                                 </label>

@@ -1,16 +1,8 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "feedback_portal";
+require_once './DB_connection.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-var_dump($_POST);
+// var_dump($_POST);
 
 
 $qry = "INSERT INTO response
