@@ -1,24 +1,30 @@
 <?php
-$error = "";
-if (isset($_GET['error']))
-    $error = $_GET['error'];
+    if(!isset($_SESSION))
+        session_start();
+    if(isset($_SESSION['user'])){
+        header('Location: index.php?act=home');
+    }
+
+    $error = "";
+    if (isset($_GET['error']))
+        $error = $_GET['error'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <?php
-        require_once './header.php';
+        require 'header.php';
     ?>
     
-    <title>Login</title>
+    <title>Login Page</title>
     <!-- Our Custom CSS -->
     <style>
         body{
             padding: 0;
             margin: 0;
             height: 90vh;
-            background-image: url("./campus.jpg");
+            background-image: url("./imgs/campus.jpg");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -30,20 +36,23 @@ if (isset($_GET['error']))
 <body>
     <div class="container justify-content-center align-items-center d-flex" style="min-height: 90vh;">
         <div class="card">
+            <a href="controller/student.php">Student submission Link</a>
             <div class="card-header">
-                <img src="./mitaoe.png" class="card-img-top" alt="MIT logo" >
+                <img src="./imgs/mitaoe.png" class="card-img-top" alt="MIT logo" >
             </div>
             <div class="card-body">
-                <form action="auth.php" method="POST">
+                <div class="row mx-auto text-danger">
+                    <?php
+                    if(!empty($error))
+                        echo "<span><i>Incorrect Username or Password...</i></span>";
+                    ?>
+                </div>
+                <form action="?act=check" method="POST">
                     <div class="row">
                         <div class="form-grp col">
                             <label for="username">Username:</label>
                             <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
                         </div>
-                        <?php
-                        // if(!empty($error))
-                        //     echo "No such username exists...";
-                        ?>
                         <div class="form-grp col">
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" required>

@@ -1,16 +1,13 @@
 <?php
 
-// var_dump($_POST);
+require 'model/qns_model.php';
 
-require_once './DB_connection.php';
-
+$qm = new QuestionsModel($db);
 
 $category = $_POST['cat'];
 $type = $_POST['type'];
 
-$delQry = "DELETE FROM questions
-            WHERE category='$category' AND type='$type'";
-$conn->query($delQry);
+$res = $qm->deleteQuestions(["category='$category'", "type='$type'"]);
 
 $id = 0;
 foreach($_POST as $k=>$v){
@@ -36,9 +33,9 @@ foreach($_POST as $k=>$v){
             $qry .= ", '$opt'";
         }
         $qry .= ", '$category', '$id', '$type')";
-        echo $qry;
+        // echo $qry;
         
-        if ($conn->query($qry) === TRUE){
+        if ($qm->addQuestion($qry) === TRUE){
             echo "New record created successfully";
         } else {
             echo "Error: <br>" . $conn->error;
@@ -47,8 +44,8 @@ foreach($_POST as $k=>$v){
     echo "<br>";
 }
 
-$conn->close();
+// $conn->close();
 
-header('Location: ./feedback.php?cat='.$category);
+header('Location: index.php?act=create_fb&cat='.$category);
 
 ?>

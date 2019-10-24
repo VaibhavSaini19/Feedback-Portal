@@ -1,10 +1,9 @@
 <?php
-
-require_once './DB_connection.php';
-
-// $dept = $_POST['dept'];
-$dept = $_GET['dept'];
-
+    if(!isset($_SESSION))
+        session_start();
+    if(!isset($_SESSION['user'])){
+        header('Location: index.php?act=login');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -12,24 +11,78 @@ $dept = $_GET['dept'];
 
 <head>
     <?php
-        require_once './header.php';
+        require_once 'view/header.php';
     ?>
 
     <title>Department</title>
 
     <!-- Our Custom CSS -->
+    <!-- Our Custom Js -->
+    <script>
+        function showForm(){
+            var cat = $("#cat").val();
+            var dept = "<?php echo $deptName;?>";
+            $.get("model/getForm.php", data={category: cat, department: dept, type: 'theory'}, function(data, status){
+                $("#theoryQns").html(data);
+            });
+            $.get("model/getForm.php", data={category: cat, department: dept, type: 'lab'}, function(data, status){
+                $("#labQns").html(data);
+            });
+            $("#formTab").removeClass("d-none");
+        }
+
+        function showFaculty(){
+            var department = "<?php echo $deptName; ?>";
+            $.get("model/getFaculty.php", data={modify: "yes", department: department}, function(data, status){
+                $("#facultyTable").html(data);
+            });
+        }
+
+        $(document).on('click','#edit',function(){
+            var formElement = `
+            <form action="?act=update_Load&mode=edit" method="POST" id="editForm">
+                <input type="hidden" name="department" value="`+'<?php echo $deptName;?>'+`" />
+                <input type="hidden" name="facultyOld" value="`+$(this).closest("tr").find("td:eq(2)").html()+`" />
+                <label for="faculty">Faculty name:</label>
+                <input type="text" name="facultyNew" required="true" id="faculty" class="form-control"  
+                    placeholder="Enter Faculty name" value="`+$(this).closest("tr").find("td:eq(2)").html()+`">
+            </form>`;
+            $(".modal-body").html(formElement);
+            $("#myModal").modal("toggle");
+        });
+
+        $(document).on('click','#delete',function(){
+            if(confirm("Are you sure you want to delete this record?")==true){
+                var arr = [];
+                for(var i=0; i<5; i++){
+                    arr.push($(this).closest("tr").find("td:eq("+i+")").html());
+                }
+                arr = arr.join(",");
+                var dept = "<?php echo $deptName;?>";
+                $.post("model/faculty/updateLoad.php?mode=delete", data={department:dept, arr:arr}, function(data, status){
+                    // alert("Record deleted successfully");
+                    alert(data);
+                });
+                // window.location.reload();
+                showFaculty();
+            }
+        });
+
+    </script>
+    
 
 </head>
 
 <body onload="showFaculty()">
+    <?php
+        include 'view/navbar.php';
+    ?>
     <div class="container col-10 shadow-lg border rounded m-3 mx-auto p-3">
         <div class="card">
             <div class="card-header">
                 <?php
-                $qry = "SELECT name, description FROM department WHERE name='$dept'";
-                $res = $conn->query($qry);
-                if ($res->num_rows > 0){
-                    $row = $res->fetch_assoc();
+                if($dept_data && count($dept_data)){
+                    $row = $dept_data[0];
                     echo '
                 <div class="row">
                     <div class="col-3 text-info">
@@ -74,10 +127,8 @@ $dept = $_GET['dept'];
                                                 <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
                                                     <option value="" hidden disabled selected>Select category</option>
                                                     <?php
-                                                    $qry = "SELECT * FROM category_list";
-                                                    $res = $conn->query($qry);
-                                                    if ($res->num_rows > 0){
-                                                        while($cat = $res->fetch_assoc()){
+                                                    if($cat_data && count($cat_data)){
+                                                        foreach($cat_data as $cat){
                                                             echo '
                                                     <option value="'.$cat['name'].'">'.$cat['name'].'</option>
                                                             ';
@@ -98,9 +149,9 @@ $dept = $_GET['dept'];
                                         <div class="collapse" id="addFacultyForm">
                                             <div class="card shadow-md mx-auto">
                                                 <div class="card-body">
-                                                    <form action="./addLoad.php" method="POST">
+                                                    <form action="?act=add_Load" method="POST">
                                                         <?php
-                                                            echo '<input type="hidden" name="dept" value="'.$dept.'" id="deptName" class="form-control">';
+                                                            echo '<input type="hidden" name="dept" value="'.$deptName.'" id="deptName" class="form-control">';
                                                         ?>
                                                         <div class="row text-left">
                                                             <div class="form-group col-5">
@@ -212,57 +263,5 @@ $dept = $_GET['dept'];
         </div>
     </div>
 </body>
-<script>
-    function showForm(){
-        var cat = $("#cat").val();
-        var dept = "<?php echo $dept;?>";
-        $.get("getForm.php", data={category: cat, department: dept, type: 'theory'}, function(data, status){
-            $("#theoryQns").html(data);
-        });
-        $.get("getForm.php", data={category: cat, department: dept, type: 'lab'}, function(data, status){
-            $("#labQns").html(data);
-        });
-
-        $("#formTab").removeClass("d-none");
-    }
-
-    function showFaculty(){
-        var department = "<?php echo $dept; ?>";
-        $.get("getFaculty.php", data={modify: "yes", department: department}, function(data, status){
-            $("#facultyTable").html(data);
-        });
-    }
-
-    $(document).on('click','#edit',function(){
-        var formElement = `
-        <form action="updateFaculty.php?mode=edit" method="POST" id="editForm">
-            <input type="hidden" name="department" value="`+'<?php echo $dept;?>'+`" />
-            <input type="hidden" name="facultyOld" value="`+$(this).closest("tr").find("td:eq(2)").html()+`" />
-            <label for="faculty">Faculty name:</label>
-            <input type="text" name="facultyNew" required="true" id="faculty" class="form-control"  
-                placeholder="Enter Faculty name" value="`+$(this).closest("tr").find("td:eq(2)").html()+`">
-        </form>`;
-        $(".modal-body").html(formElement);
-        $("#myModal").modal("toggle");
-    });
-
-    $(document).on('click','#delete',function(){
-        if(confirm("Are you sure you want to delete this record?")==true){
-            var arr = [];
-            for(var i=0; i<5; i++){
-                arr.push($(this).closest("tr").find("td:eq("+i+")").html());
-            }
-            arr = arr.join(",");
-            var dept = "<?php echo $dept;?>";
-            $.post("updateFaculty.php?mode=delete", data={department:dept, arr:arr}, function(data, status){
-                // alert("Record deleted successfully");
-                alert(data);
-            });
-            // window.location.reload();
-            showFaculty();
-        }
-    });
-
-</script>
 
 </html>

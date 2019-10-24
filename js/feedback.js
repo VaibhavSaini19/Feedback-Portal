@@ -124,12 +124,9 @@ function copySlot(slot) {
     var parent = referenceChild.parentElement;
     // console.log(referenceChild);
     // console.log(parent);
-    // var newSlot = document.querySelector(".slot").cloneNode(true);
+    var newSlot = document.querySelector(".slot").cloneNode(true);
     var newSlot = referenceChild.cloneNode(true);
     // console.log(newSlot);
-    var temp = "customSwitch" + (document.getElementsByClassName("slot").length + 1);
-    newSlot.getElementsByClassName("custom-control-input")[0].id = temp;
-    newSlot.getElementsByClassName("custom-control-label")[0].htmlFor = temp;
     var totalSlots = getSlotsLen() + 1;
     // console.log(totalSlots);
     newSlot.querySelector('#question').name = 'question' + (totalSlots);

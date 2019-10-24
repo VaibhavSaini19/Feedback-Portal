@@ -10,6 +10,9 @@ body {
     cursor: grabbing;
     box-shadow: 1px 1px 20px cyan;
 }
+.slot:active .slot{
+    box-shadow: 1px 1px 20px gray;
+}
 
 .fas,
 .far {
@@ -29,7 +32,7 @@ body {
 }
 .verticalRule {
     border-left: 1px solid #9b9b9b;
-    margin: 0 1em;
+    margin: 0 0 0 1em;
 }
 .addOptBtn {
     padding: 0.5em;

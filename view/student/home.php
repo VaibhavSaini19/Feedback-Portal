@@ -1,21 +1,18 @@
 <?php
-require_once './DB_connection.php';
-
-$token = "XA1P5WN7F";
-$dept = 'SCET';
-$year = 'SY';
-$block = 'B5';
-
-// $token = $_POST['token'];
-
-// $qry = "SELECT * FROM student_tokens
-//         WHERE token='$token'";
-// $res = $conn->query($qry)->fetch_array();
-
-// $dept = $res['dept'];
-// $year = $res['year'];
-// $block = $res['block'];
-
+    if(!isset($_SESSION))
+        session_start();
+    if(isset($_SESSION['user']) && $_SESSION['user']['status']==0){
+        $token = $_SESSION['user']['token'];
+        $dept = $_SESSION['user']['dept'];
+        $year = $_SESSION['user']['year'];
+        $block = $_SESSION['user']['block'];
+        $name = $_SESSION['user']['name'];
+        $prn = $_SESSION['user']['prn'];
+    }else{
+        header('Location: student.php?act=complete');
+        exit();
+    }
+    // var_dump($_SESSION['user']);
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +20,7 @@ $block = 'B5';
 
 <head>
     <?php
-    require_once './header.php';
+    require_once '../view/header.php';
     ?>
 
     <title>Feedback Form</title>
@@ -36,9 +33,29 @@ $block = 'B5';
     <div class="container col-10 shadow-lg border rounded m-3 mx-auto p-3">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-primary">
-                    Feedback Form:
-                </h2>
+                <h1 class="text-primary text-center">
+                    <u>Feedback Form:</u>
+                </h1>
+                <table class="table table-bordered text-center">
+                    <thead class="table-success">
+                        <tr>
+                            <th>PRN</th>
+                            <th>Name</th>
+                            <th>Block</th>
+                            <th>Year</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-info">
+                        <tr>
+                            <td><?php echo $prn;?></td>
+                            <td><?php echo $name;?></td>
+                            <td><?php echo $block;?></td>
+                            <td><?php echo $year;?></td>
+                            <td><?php echo $dept;?></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="card-body">
                 <div class="justify-content-center" id="formTab">
@@ -54,7 +71,7 @@ $block = 'B5';
                             </a>
                         </li>
                     </ul>
-                    <form action="./saveResponse.php" method="POST" onsubmit="return validate()" id="formTable" class="justify-content-cente align-items-center">
+                    <form action="?act=save_Response" method="POST" onsubmit="return validate()" id="formTable" class="justify-content-cente align-items-center">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
                             </div>
@@ -72,7 +89,7 @@ $block = 'B5';
 </body>
 <script>
     function loadForm() {
-        $.get("getForm.php", data = {
+        $.get("../model/getForm.php", data = {
                 type: 'theory',
                 category: 'Student',
                 department: "<?php echo $dept; ?>",
@@ -83,7 +100,7 @@ $block = 'B5';
             function(data, status) {
                 $("#theory").html(data);
             });
-        $.get("getForm.php", data = {
+        $.get("../model/getForm.php", data = {
                 type: 'lab',
                 category: 'student',
                 department: "<?php echo $dept; ?>",

@@ -1,19 +1,10 @@
 <?php
-require_once './DB_connection.php';
-
-$category = $_GET['cat'];
-
-$qryTheory = "SELECT * from questions
-        WHERE category='$category' AND type='theory'
-        ORDER BY id";
-// echo $qryTheory;
-$resultTheory = $conn->query($qryTheory);
-
-$qryLab = "SELECT * from questions
-        WHERE category='$category' AND type='lab'
-        ORDER BY id";
-// echo $qryLab;
-$resultLab = $conn->query($qryLab);
+    if(!isset($_SESSION))
+        session_start();
+    if(!isset($_SESSION['user'])){
+        header ('Location: index.php?act=login');
+        exit();
+    }
 
 ?>
 <!DOCTYPE html>
@@ -54,9 +45,9 @@ $resultLab = $conn->query($qryLab);
         ></script>
 
         <!-- Our custom CSS -->
-        <link rel="stylesheet" href="./feedback.css" />
+        <link rel="stylesheet" href="css/feedback.css" />
         <!-- Our custom JS -->
-        <script src="./feedback.js"></script>
+        <script src="js/feedback.js"></script>
         <!-- FontAwesome kit-->
         <script src="https://kit.fontawesome.com/728d1d3dec.js"></script>
     </head>
@@ -69,9 +60,10 @@ $resultLab = $conn->query($qryLab);
                 </a>
             </div>
             <div class="card m-5 mx-auto">
-                <h3 class="card-title highlight bg-light">
-                    <input type="text" name="title" id="title" value="<?php echo $category;?> Feedback Form"/>
-                    <textarea name="desc" id="desc" placeholder="Form description"></textarea>
+                <h3 class="card-title highlight bg-light p-4">
+                    <span><u><?php echo $category;?> Feedback Form</u></span>
+                    <!-- <input type="text" name="title" id="title" value="<?php echo $category;?> Feedback Form"/>
+                    <textarea name="desc" id="desc" placeholder="Form description"></textarea> -->
                 </h3>
                 <div class="justify-content-center" id="formTab">
                     <ul class="nav nav-tabs nav-fill" role="tablist" id="myTab">
@@ -100,15 +92,15 @@ $resultLab = $conn->query($qryLab);
                         <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
                         <?php
                             echo '
-                            <form action="./saveQns.php" method="POST" id="theoryForm">
+                            <form action="?act=save_Qns" method="POST" id="theoryForm">
                                 <input type="hidden" name="cat" id="cat" value="'.$category.'" />
                                 <input type="hidden" name="type" id="type" value="theory" />
                                 <div class="card-body" id="sortable">
                             ';
-                            if ($resultTheory->num_rows > 0)
+                            if($resultTheory && count($resultTheory))
                             {
                                 $qnNum = 0;
-                                while($row = $resultTheory->fetch_assoc()) {
+                                foreach($resultTheory as $row){
                                     $qnNum += 1;
                                     echo '
                                     <div class="slot highlight">
@@ -144,16 +136,10 @@ $resultLab = $conn->query($qryLab);
                                             data-toggle="tooltip" data-placement="top" title="Duplicate">
                                                 <i class="far fa-copy"></i>&nbsp;
                                             </div>
+                                            <div class="verticalRule"></div>
                                             <div class="btn modify deleteBtn" onclick="removeSlot(event)"
                                             data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="fas fa-trash"></i>&nbsp;
-                                            </div>
-                                            <div class="verticalRule"></div>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
-                                                <label class="custom-control-label" for="customSwitch1">
-                                                    Required
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -185,16 +171,10 @@ $resultLab = $conn->query($qryLab);
                                             data-toggle="tooltip" data-placement="top" title="Duplicate">
                                                 <i class="far fa-copy"></i>&nbsp;
                                             </div>
+                                            <div class="verticalRule"></div>
                                             <div class="btn modify deleteBtn" onclick="removeSlot(event)"
                                             data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="fas fa-trash"></i>&nbsp;
-                                            </div>
-                                            <div class="verticalRule"></div>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="true"/>
-                                                <label class="custom-control-label" for="customSwitch1">
-                                                    Required
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -209,15 +189,15 @@ $resultLab = $conn->query($qryLab);
                         <div class="tab-pane fade" id="lab" role="tabpanel" aria-labelledby="lab-tab">
                         <?php
                             echo '
-                            <form action="./saveQns.php" method="POST" id="labForm">
+                            <form action="?act=save_Qns" method="POST" id="labForm">
                                 <input type="hidden" name="cat" id="cat" value="'.$category.'" />
                                 <input type="hidden" name="type" id="type" value="lab" />
                                 <div class="card-body" id="sortable">
                             ';
-                            if ($resultLab->num_rows > 0)
+                            if($resultLab && count($resultLab))
                             {
                                 $qnNum = 0;
-                                while($row = $resultLab->fetch_assoc()) {
+                                foreach($resultLab as $row){
                                     $qnNum += 1;
                                     echo '
                                     <div class="slot highlight">
@@ -321,5 +301,5 @@ $resultLab = $conn->query($qryLab);
     </body>
 </html>
 <?php
-$conn->close();
+// $conn->close();
 ?>

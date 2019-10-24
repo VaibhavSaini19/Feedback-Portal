@@ -1,6 +1,6 @@
 <?php
 
-require_once './DB_connection.php';
+// require_once './DB_connection.php';
 
 $conditions = array();
 
@@ -15,13 +15,6 @@ if(!empty($_GET['course']))
 if(!empty($_GET['type']))
     array_push($conditions, "type='".$_GET['type']."'");
 
-$flag = 0;
-if(sizeof($conditions) > 0)
-    $flag = 1;
-$conditions = implode(" AND ", $conditions);
-
-if($flag)
-    $conditions = " WHERE ".$conditions;
 
 $modifiable = $_GET['modify'];
 $showDept = ($_GET['department'] == null);
@@ -84,15 +77,17 @@ $data = '
     <tbody>';
 
 
-$qry = "SELECT * FROM load_distribution
-        $conditions";
-// echo $qry;
-$res = $conn->query($qry);
+require '../core/db.php';
+$db = new DB();
 
-if ($res->num_rows > 0)
+require 'load_dist_model.php';
+$ldm = new LoadDistributionModel($db);
+
+$res = $ldm->enlistLoadDistribution(["*"], $conditions);
+
+if ($res && count($res))
 {
-    while($row = $res->fetch_assoc())
-    {
+    foreach($res as $row){
         $data .= '
         <tr>
         ';
