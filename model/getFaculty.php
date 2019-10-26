@@ -99,8 +99,8 @@ if ($res && count($res))
         $data .= '
             <td>'.$row['year'].'</td>
             <td>'.$row['block'].'</td>
-            <td>'.$row['faculty'].'</td>
-            <td>'.$row['course'].'</td>
+            <td>'.$row['faculty'].' ('.$row['fac_abbr'].')</td>
+            <td>'.$row['course'].' ('.$row['course_abbr'].')</td>
             <td>'.$row['type'].'</td>
             ';
         if($modifiable == "yes"){

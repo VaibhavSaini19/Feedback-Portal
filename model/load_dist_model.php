@@ -7,7 +7,7 @@ class LoadDistributionModel {
         $this->db = $db;
     }
    
-    function enlistLoadDistribution($project=[], $filter=[]){
+    function enlistLoadDistribution($project=[], $filter=[], $groupby=[]){
         if($project != []){
             $project = implode(', ', $project);
         }else{
@@ -19,7 +19,13 @@ class LoadDistributionModel {
         }else{
             $filter = "";
         }
-        $sql = "SELECT $project from load_distribution $filter";
+        if($groupby != []){
+            $groupby = ' GROUP BY ' . implode(', ', $groupby);
+        }else{
+            $groupby = "";
+        }
+        $sql = "SELECT $project from load_distribution $filter $groupby";
+        // var_dump($sql);
         $this->data = $this->db->execute($sql,"S");
         return $this->data;
     }

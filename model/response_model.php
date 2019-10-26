@@ -39,5 +39,26 @@ class ResponseModel {
         return false;
     }
 
+    function enlistResponse($project=[], $filter=[], $groupby=[]){
+        if(!empty($project)){
+            $project = implode(', ', $project);
+        }else{
+            $project = '*';
+        }
+        if(!empty($filter)){
+            $filter = ' WHERE ' . implode(' AND ', $filter);
+        }else{
+            $filter = '';
+        }
+        if(!empty($groupby)){
+            $groupby = ' GROUP BY ' . implode(', ', $groupby);
+        }else{
+            $groupby = '';
+        }
+        $sql = "SELECT $project FROM response $filter $groupby";
+        // var_dump($sql);
+        return $this->db->execute($sql ,"S");
+    }
+
 }
 ?>
