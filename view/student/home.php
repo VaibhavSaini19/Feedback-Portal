@@ -1,6 +1,7 @@
 <?php
     if(!isset($_SESSION))
         session_start();
+    // session_unset();
     if(isset($_SESSION['user']) && $_SESSION['user']['status']==0){
         $token = $_SESSION['user']['token'];
         $dept = $_SESSION['user']['dept'];
@@ -8,7 +9,8 @@
         $block = $_SESSION['user']['block'];
         $name = $_SESSION['user']['name'];
         $prn = $_SESSION['user']['prn'];
-    }else{
+    }else if(isset($_SESSION['user']) && $_SESSION['user']['status']==1){
+        session_unset();
         header('Location: student.php?act=complete');
         exit();
     }

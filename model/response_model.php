@@ -15,14 +15,17 @@ class ResponseModel {
             $qid = $desc[0];
             $faculty = $desc[1];
             $course = $desc[2];
-            $type = $desc[3];
-            $token = $desc[4];
+            $dept = $desc[3];
+            $year = $desc[4];
+            $block = $desc[5];
+            $type = $desc[6];
+            $token = $desc[7];
             $score = (int)$score;
 
             if($flag){
                 $sql .= ", ";
             }
-            $sql .= "('$faculty', '$course', '$type', $qid, $score, '$token')";
+            $sql .= "('$faculty', '$course', '$dept', '$year', '$block','$type', $qid, $score, '$token')";
 
             $flag = 1;
         }

@@ -232,8 +232,8 @@
                                         <div class="form-group col">
                                             <label for="course_type">Course type:</label>
                                             <div class="row justicy-content-center align-items-center">
-                                                <input type="radio" name="course_type" value="Theory"class="mx-3" style="transform: scale(1.5);" id="theory" placeholder="Course abbr">Theory
-                                                <input type="radio" name="course_type" value="Lab"class="mx-3" style="transform: scale(1.5);" id="lab" placeholder="Course abbr">Lab
+                                                <input type="radio" name="course_type" required value="Theory"class="mx-3" style="transform: scale(1.5);" id="theory" placeholder="Course abbr">Theory
+                                                <input type="radio" name="course_type" required value="Lab"class="mx-3" style="transform: scale(1.5);" id="lab" placeholder="Course abbr">Lab
                                             </div>
                                         </div>
                                     </div>
