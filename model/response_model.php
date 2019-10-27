@@ -6,6 +6,32 @@ class ResponseModel {
     function __construct($db) {
         $this->db = $db;
     }
+    
+    function enlistResponse($project=[], $filter=[], $groupby=[], $orderby=[]){
+        if(!empty($project)){
+            $project = implode(', ', $project);
+        }else{
+            $project = '*';
+        }
+        if(!empty($filter)){
+            $filter = ' WHERE ' . implode(' AND ', $filter);
+        }else{
+            $filter = '';
+        }
+        if(!empty($groupby)){
+            $groupby = ' GROUP BY ' . implode(', ', $groupby);
+        }else{
+            $groupby = '';
+        }
+        if(!empty($orderby)){
+            $orderby = ' ORDER BY ' . implode(', ', $orderby);
+        }else{
+            $orderby = '';
+        }
+        $sql = "SELECT $project FROM response $filter $groupby $orderby";
+        // var_dump($sql);
+        return $this->db->execute($sql ,"S");
+    }
 
     function saveData($prn) {
         $sql = "INSERT INTO response VALUES ";
@@ -37,27 +63,6 @@ class ResponseModel {
             return true;
         }
         return false;
-    }
-
-    function enlistResponse($project=[], $filter=[], $groupby=[]){
-        if(!empty($project)){
-            $project = implode(', ', $project);
-        }else{
-            $project = '*';
-        }
-        if(!empty($filter)){
-            $filter = ' WHERE ' . implode(' AND ', $filter);
-        }else{
-            $filter = '';
-        }
-        if(!empty($groupby)){
-            $groupby = ' GROUP BY ' . implode(', ', $groupby);
-        }else{
-            $groupby = '';
-        }
-        $sql = "SELECT $project FROM response $filter $groupby";
-        // var_dump($sql);
-        return $this->db->execute($sql ,"S");
     }
 
 }
