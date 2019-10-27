@@ -23,7 +23,7 @@ if(!$ldm_data){
         for($a=0; $a<2; $a++){
             $type = $types[$a];
             $rm_qn_count = intval(($rm->enlistResponse(["count(distinct(qid))"], ["type='$type'"]))[0]['count(distinct(qid))']);
-            // var_dump($type, $rm_qn_count);
+            // var_dump($rm_qn_count);
             $rm_data = $rm->enlistResponse(["*", "count(score) as score_count"],
                                     ["faculty='$fac_data[fac_abbr]'", "type='$type'", "dept='$dept'", "year='$year'", "block='$block'"],
                                     ["qid", "score"], ["qid ASC", "score DESC"]);
@@ -60,12 +60,14 @@ if(!$ldm_data){
         </thead>
         <tbody>';
         
-        // var_dump(count($rm_data));
+                // var_dump(count($rm_data));
+                $avg = 0;
                 for($i=1; $i<=$rm_qn_count; $i++){
                     $x = 5;
                     $j = 0;
                     $ctr = 1;
                     $total = 0;
+                    $stu_ctr = 0;
                     $data .= '
             <tr>
                 <td><strong>'.$i.'</strong></td>';
@@ -74,6 +76,7 @@ if(!$ldm_data){
                             if($rm_data[$j]['score'] == $x){
                                 $data .= '
                 <td>'.$rm_data[$j]['score_count'].'</td>';
+                                $stu_ctr += $rm_data[$j]['score_count'];
                                 $total += $rm_data[$j]['score']*$rm_data[$j]['score_count']/5;
                             }else{
                                 $j -= 1;
@@ -89,12 +92,17 @@ if(!$ldm_data){
                         $data .= '
                 <td>-</td>';
                     }
+                    $avg += $total/$stu_ctr;
                     $data .= '
-                <td class="table-success"><strong>'.round($total/$ctr, 2).'</strong></td>';
-                    $data .= '
+                <td class="table-primary">'.round($total/$stu_ctr, 2).'</td>
             </tr>';
                 }
+                $avg = round($avg/$rm_qn_count, 2);
                 $data .= '
+            <tr>
+                <td colspan="6"><strong>Average:</strong></td>
+                <td class="table-success"><strong>'.$avg.'</strong></td>
+            </tr>
         </tbody>
     </table>';
                 echo $data;

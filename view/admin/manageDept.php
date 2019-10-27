@@ -16,29 +16,25 @@
     ?>
     <title>Manage Department</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="js/html2canvas.min.js"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     <script type="text/javascript">
         function saveTable2PDF() {
-            var pdf = new jsPDF('landscape', 'pt', 'letter');
-            source = $('#statsTable')[0];
-            specialElementHandlers = {
-                '#bypassme': function(element, renderer) {
-                    return true
-                }
-            };
-            margins = { top: 10, bottom: 0, left: 10, width: 800};
-            pdf.fromHTML(
-                    source, // HTML string or DOM elem ref.
-                    margins.left, // x coord
-                    margins.top, {// y coord
-                        'width': margins.width, // max width of content on PDF
-                        'elementHandlers': specialElementHandlers
-                    },
-            function(dispose) {
-                pdf.save('Test.pdf');
-            }
-            , margins);
+            html2canvas(document.getElementById("statsTable"), {
+                scale: window.devicePixelRatio,
+                logging: true,
+                profile: true,
+                useCORS: false}).then(function (canvas) {
+                    var data = canvas.toDataURL('image/jpeg', 0.9);
+                    var src = encodeURI(data);
+                    // document.getElementById('screenshot').src = src;
+                    // const screenShot = document.querySelector('#screenshot').src;
+                    var pdf = jsPDF();
+                    pdf.text(30, 20, 'Testing...');
+                    pdf.addImage(src, 'JPEG', 1, 1);
+                    pdf.save('Test.pdf');
+            });
         }
     </script>
     
@@ -83,11 +79,12 @@
 
         function getChart(){
             var department = "<?php echo $deptName; ?>";
-            $filterBy = $("[name='filterBy']").val();
+            var filterBy = $("input[name='filterBy']:checked").val();
             var dataPoints = null;
             $.get("model/getChartData.php", data={dept: department, filterBy: filterBy}, function(data, status){
-                dataPoints = data;
-            });
+                dataPoints = JSON.parse(data);
+            }).then(() => {
+            // console.log(dataPoints);
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
                 exportEnabled: true,
@@ -102,6 +99,7 @@
             });
             chart.render();
             console.log("Done!");
+            });
         }
     </script>
 
@@ -257,6 +255,7 @@
                                                     <div class="btn btn-success mx-auto" onclick="getStats()">Submit</div>
                                                     <button class="btn btn-info mx-auto" onclick="saveTable2PDF()">Download</button>
                                                 </div>
+                                                <img src="" alt="" id="screenshot">
                                                 <div class="row justify-content-center border rounded m-2 p-2" id="statsTable">
                                                 </div>
                                             </div>
