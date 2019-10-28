@@ -17,7 +17,7 @@
     <title>Manage Department</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
     <script src="js/html2canvas.min.js"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <script type="text/javascript">
         function saveTable2PDF() {
@@ -79,27 +79,52 @@
 
         function getChart(){
             var department = "<?php echo $deptName; ?>";
-            var filterBy = $("input[name='filterBy']:checked").val();
+            var graphYear = $("#graphYear").val();
+            var filterBy = $("#filterby").val();
             var dataPoints = null;
-            $.get("model/getChartData.php", data={dept: department, filterBy: filterBy}, function(data, status){
-                dataPoints = JSON.parse(data);
-            }).then(() => {
-            // console.log(dataPoints);
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                exportEnabled: true,
-                theme: "light1", // "light1", "light2", "dark1", "dark2"
-                title:{
-                    text: "PHP Column Chart from Database"
-                },
-                data: [{
-                    type: "column", //change type to column, bar, line, area, pie, etc  
-                    dataPoints: dataPoints
-                }]
+            var x_labels_list = {"block": Array.from({length: 30}, (v, k) => "Qn "+(k+1)), "subject": Array.from({length: 30}, (v, k) => "Qn "+(k+1)), "question": Array.from({length: 30}, (v, k) => "Option "+(k+1))};
+            var y_labels_list = {"block": "Avg.score", "subject": "Avg.score", "question": "Student count"}
+            var innerColors = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'];
+            var borderColors = ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'];
+            var backgroundColor_list = replicateArray(innerColors, 5);
+            var borderColor_list = replicateArray(borderColors, 5);
+            
+            $("#chartContainer").empty();
+            $.get("model/getChartData.php", data={dept: department, year: graphYear, filterBy: filterBy}, function(data, status){
+                // console.log(data);
+                dataPoints = eval(data);
+                // console.log(dataPoints);
+                var titles_list = dataPoints[0];
+                dataPoints = dataPoints.slice(1, dataPoints.length);
+                for(var i=0; i<dataPoints.length; i++){
+                    var chart_id = "chart" + i;
+                    $("#chartContainer").append('<canvas id="'+chart_id+'"></canvas>'); 
+                    var ctx = document.getElementById(chart_id).getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: x_labels_list[filterBy].slice(0, dataPoints[i].length),
+                            datasets: [{
+                                label: y_labels_list[filterBy],
+                                data: dataPoints[i],
+                                backgroundColor: backgroundColor_list.slice(0, dataPoints[i].length),
+                                borderColor: borderColor_list.slice(0, dataPoints[i].length),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            title: { display: true, text: titles_list[i]},
+                            scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
+                        }
+                    });
+                }
             });
-            chart.render();
-            console.log("Done!");
-            });
+        }
+
+        function replicateArray(array, n) {
+            var arrays = Array.apply(null, new Array(n)); // Create an array of size "n" with undefined values
+            arrays = arrays.map(function() { return array }); // Replace each "undefined" with our array, resulting in an array of n copies of our array
+            return [].concat.apply([], arrays); // Flatten our array of arrays
         }
     </script>
 
@@ -145,7 +170,7 @@
                             data-toggle="list" href="#list-results" role="tab" aria-controls="results">
                             Results
                         </a>
-                        <a class="list-group-item list-group-item-action" id="list-results-list" 
+                        <a class="list-group-item list-group-item-action" id="list-edit-list" 
                             data-toggle="list" href="#list-edit" role="tab" aria-controls="edit">
                             Edit Dept. info
                         </a>
@@ -252,7 +277,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row d-none" id="statsBtn">
-                                                    <div class="btn btn-success mx-auto" onclick="getStats()">Submit</div>
+                                                    <button class="btn btn-success mx-auto" type="submit" onclick="getStats()">Submit</button>
                                                     <button class="btn btn-info mx-auto" onclick="saveTable2PDF()">Download</button>
                                                 </div>
                                                 <img src="" alt="" id="screenshot">
@@ -261,15 +286,30 @@
                                             </div>
                                             <div class="tab-pane fade" id="graph" role="tabpanel" aria-labelledby="graph-tab">
                                                 <div class="row justify-content-center m-1">
-                                                    <div class="form-group">
-                                                        <label for="filterBy">Display Graph:</label>
-                                                        <div class="row justicy-content-center align-items-center">
-                                                            <input type="radio" name="filterBy" onchange="getChart();" required value="block"class="mx-3" style="transform: scale(1.5);" id="theory">Block-wise
-                                                            <input type="radio" name="filterBy" onchange="getChart();" required value="subject"class="mx-3" style="transform: scale(1.5);" id="lab" >Subject-wise
-                                                            <input type="radio" name="filterBy" onchange="getChart();" required value="question"class="mx-3" style="transform: scale(1.5);" id="lab" >Question-wise
-                                                        </div>
+                                                    <div class="form-group col-4">
+                                                        <label for="year">Year:</label>
+                                                        <select class="form-control" name="graphYear" id="graphYear" required>
+                                                            <option value="" selected hidden disabled>Select Year</option>
+                                                            <option value="FY">FY</option>
+                                                            <option value="SY">SY</option>
+                                                            <option value="TY">TY</option>
+                                                            <option value="BE">BE</option>
+                                                        </select>
                                                     </div>
-                                                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                                    <div class="form-group col-4">
+                                                        <label for="filterby">Display graph by:</label>
+                                                        <select class="form-control" name="filterby" id="filterby" required onchange="$('#graphBtn').removeClass('d-none');">
+                                                            <option value="" selected hidden disabled>Select filter</option>
+                                                            <option value="block" >Block-wise</option>
+                                                            <option value="subject">Subject-wise</option>
+                                                            <option value="question">Question-wise</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="graphBtn">
+                                                    <button class="btn btn-info mx-auto" onclick="getChart()" type="submit">Submit</button>
+                                                </div>
+                                                <div class="mx-auto" id="chartContainer" style="width: 40em;">
                                                 </div>
                                             </div>
                                         </div>

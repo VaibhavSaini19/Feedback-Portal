@@ -7,19 +7,29 @@ class QuestionsModel {
         $this->db = $db;
     }
    
-    function enlistQuestions($filter=[], $orderBy=''){
+    function enlistQuestions($project=[], $filter=[], $groupBy=[], $orderBy=[]){
+        if($project != []){
+            $project = implode(', ', $project);
+        } else {
+            $project = "*";
+        }
         if($filter != []){
-            $filter = implode(' AND ', $filter);
-            $filter = ' WHERE ' . $filter;
+            $filter = ' WHERE ' .implode(' AND ', $filter);
         } else {
             $filter = '';
         }
-        if($orderBy != ''){
-            $orderBy = ' ORDER BY ' . $orderBy;
+        if($groupBy != []){
+            $groupBy = ' GROUP BY ' . implode(', ', $groupBy);
+        } else {
+            $groupBy = '';
+        }
+        if($orderBy != []){
+            $orderBy = ' ORDER BY ' . implode(', ', $orderBy);
         } else {
             $orderBy = '';
         }
-        $sql = "SELECT * from questions $filter $orderBy";
+        $sql = "SELECT $project from questions $filter $groupBy $orderBy";
+        // var_dump($sql);
         $this->data = $this->db->execute($sql,"S");
         return $this->data;
     }

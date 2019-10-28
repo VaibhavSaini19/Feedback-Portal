@@ -43,7 +43,7 @@ require 'qns_model.php';
 $qm = new QuestionsModel($db);
 
 $fac_list = $ldm->enlistLoadDistribution(["*"], $conditions);
-$res = $qm->enlistQuestions(["category='$cat'", "type='$type'"], 'id');
+$res = $qm->enlistQuestions([], ["category='$cat'", "type='$type'"], [], ["id"]);
 
 if(!$fac_list){
     $data = '

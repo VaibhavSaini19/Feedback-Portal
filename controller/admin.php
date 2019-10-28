@@ -39,8 +39,8 @@
             $category = $_POST['cat'] ?? $_GET['cat'];
             require 'model/qns_model.php';
                 $qm = new QuestionsModel($db);
-                $resultTheory = $qm->enlistQuestions(["category='$category'", "type='theory'"], 'id');
-                $resultLab = $qm->enlistQuestions(["category='$category'", "type='lab'"], 'id');
+                $resultTheory = $qm->enlistQuestions([], ["category='$category'", "type='theory'"], [], ["id"]);
+                $resultLab = $qm->enlistQuestions([], ["category='$category'", "type='lab'"], [], ["id"]);
             require 'view/admin/createFeedback.php';
             break;
         case 'save_Qns':
