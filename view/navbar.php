@@ -3,7 +3,7 @@
         <h1><u>Feedback Portal Management</u></h1>
     </div>
     <ul class="links">
-        <li><a href="index.php?act=logout"><i class="fas fa-key"></i>&emsp;Logout</a></li>
+        <li><a href="index.php?act=logout" class="btn btn-primary"><i class="fas fa-key"></i>&emsp;Logout</a></li>
     </ul>
 </div>
 
@@ -29,13 +29,15 @@
         text-decoration: none;
     }
     .nav-container .links li{
-        padding: 0.5em 0.5em;
+        margin-top: 0.6em;
+    }
+    .nav-container .links li a{
         font-weight: bold;
         margin-right: 2em;
-        border: 2px solid gray;
-        border-radius: 5px;
     }
     .nav-container .links li a:hover{
         text-decoration: none;
+        background-color: white;
+        color: green;
     }
 </style>

@@ -22,6 +22,29 @@
     <!-- Our Custom CSS -->
     <!-- Our Custom Js -->
     <script>
+        function saveTable2PDF() {
+            var tables = $(".table-result");
+            for(var i=0; i<tables.length; i++){
+                let name = tables[i].id;
+                html2canvas(tables[i], {
+                    scale: window.devicePixelRatio,
+                    logging: true,
+                    profile: true,
+                    useCORS: false
+                }).then(function (canvas) {
+                        // var data = canvas.toDataURL('image/jpeg', wid=canvas.width, hgt=canvas.height);
+                        var data = canvas.toDataURL('image/jpeg', 1);
+                        var src = encodeURI(data);
+                        var pdf = jsPDF("l", "mm", "a4");
+                        const imgProps= pdf.getImageProperties(data);
+                        const pdfWidth = pdf.internal.pageSize.getWidth();
+                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                        pdf.text(15, 10, 'Result');
+                        pdf.addImage(src, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                        pdf.save(name+'.pdf');
+                });
+            }
+        }
         function showForm(){
             var cat = $("#cat").val();
             var dept = "<?php echo $deptName;?>";
@@ -85,6 +108,8 @@
             var block = $("#blockDataFilter").val();
             $.get("model/getStatsData.php", data={dept: department, year: year, block: block}, function(data, status){
                 $("#statsTable").html(data);
+            }).then(()=>{
+                $("#statsDownloadBtn").removeClass("d-none");
             });
         }
 
@@ -192,7 +217,7 @@
                                     <div class="card-body justify-content-center">
                                         <div class="row text-center">
                                             <div class="form-group col-6">
-                                                <label for="cat">Form Category:</label>
+                                                <label for="cat">Show Form for:</label>
                                                 <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
                                                     <option value="" hidden disabled selected>Select category</option>
                                                     <?php
@@ -276,26 +301,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row justify-content-center border rounded m-2" id="facultyTable">
-                                        </div>
-                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="myModalLabel">Update Faculty</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
-                                                        <button type="submit" form="editForm" class="btn btn-primary">Save</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </div>
                                         <div class="justify-content-center d-none" id="formTab">
                                             <ul class="nav nav-tabs nav-fill" role="tablist">
                                                 <li class="nav-item">
@@ -315,6 +320,26 @@
                                                 <div class="tab-pane fade show active" id="theoryQns" role="tabpanel" aria-labelledby="theory-tab">
                                                 </div>
                                                 <div class="tab-pane fade" id="labQns" role="tabpanel" aria-labelledby="lab-tab">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center border rounded m-2" id="facultyTable">
+                                        </div>
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="myModalLabel">Update Faculty</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+                                                        <button type="submit" form="editForm" class="btn btn-primary">Save</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -367,8 +392,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="row d-none" id="statsBtn">
-                                                        <button class="btn btn-success mx-auto" type="submit" onclick="getStats()">Submit</button>
-                                                        <button class="btn btn-info mx-auto" onclick="saveTable2PDF()">Download</button>
+                                                        <button class="btn btn-success mx-auto" id="statsSubmitBtn" type="submit" onclick="getStats()">Submit</button>
+                                                        <button class="btn btn-info mx-auto d-none" id="statsDownloadBtn" onclick="saveTable2PDF()">Download</button>
                                                     </div>
                                                     <img src="" alt="" id="screenshot">
                                                     <div class="row justify-content-center border rounded m-2 p-2" id="statsTable">

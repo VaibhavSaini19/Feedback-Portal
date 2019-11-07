@@ -21,20 +21,27 @@
 
     <script type="text/javascript">
         function saveTable2PDF() {
-            html2canvas(document.getElementById("statsTable"), {
-                scale: window.devicePixelRatio,
-                logging: true,
-                profile: true,
-                useCORS: false}).then(function (canvas) {
-                    var data = canvas.toDataURL('image/jpeg', 0.9);
-                    var src = encodeURI(data);
-                    // document.getElementById('screenshot').src = src;
-                    // const screenShot = document.querySelector('#screenshot').src;
-                    var pdf = jsPDF();
-                    pdf.text(30, 20, 'Testing...');
-                    pdf.addImage(src, 'JPEG', 1, 1);
-                    pdf.save('Test.pdf');
-            });
+            var tables = $(".table-result");
+            for(var i=0; i<tables.length; i++){
+                let name = tables[i].id;
+                html2canvas(tables[i], {
+                    scale: window.devicePixelRatio,
+                    logging: true,
+                    profile: true,
+                    useCORS: false
+                }).then(function (canvas) {
+                        // var data = canvas.toDataURL('image/jpeg', wid=canvas.width, hgt=canvas.height);
+                        var data = canvas.toDataURL('image/jpeg', 1);
+                        var src = encodeURI(data);
+                        var pdf = jsPDF("l", "mm", "a4");
+                        const imgProps= pdf.getImageProperties(data);
+                        const pdfWidth = pdf.internal.pageSize.getWidth();
+                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                        pdf.text(15, 10, 'Result');
+                        pdf.addImage(src, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                        pdf.save(name+'.pdf');
+                });
+            }
         }
     </script>
     
@@ -74,6 +81,9 @@
             var block = $("#blockDataFilter").val();
             $.get("model/getStatsData.php", data={dept: department, year: year, block: block}, function(data, status){
                 $("#statsTable").html(data);
+                $("table").css("page-break-after", "always");
+            }).then(()=>{
+                $("#statsDownloadBtn").removeClass("d-none");
             });
         }
 
@@ -277,8 +287,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="row d-none" id="statsBtn">
-                                                    <button class="btn btn-success mx-auto" type="submit" onclick="getStats()">Submit</button>
-                                                    <button class="btn btn-info mx-auto" onclick="saveTable2PDF()">Download</button>
+                                                    <button class="btn btn-success mx-auto" id="statsSubmitBtn" type="submit" onclick="getStats()">Submit</button>
+                                                    <button class="btn btn-info mx-auto d-none" id="statsDownloadBtn" onclick="saveTable2PDF()">Download</button>
                                                 </div>
                                                 <img src="" alt="" id="screenshot">
                                                 <div class="row justify-content-center border rounded m-2 p-2" id="statsTable">

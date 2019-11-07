@@ -29,7 +29,7 @@ if(!$ldm_data){
                                     ["qid", "score"], ["qid ASC", "score DESC"]);
             if($rm_data){
                 $data = '
-    <table class="table table-sm table-bordered table-hover table-striped text-center" id="'.$fac_data['dept'].'_'.$fac_data['year'].'_'.$fac_data['block'].'_'.$fac_data['fac_abbr'].'_'.$fac_data['course_abbr'].'_'.$type.'">
+    <table class="table-result table table-sm table-bordered table-hover table-striped text-center" id="'.$fac_data['dept'].'_'.$fac_data['year'].'_'.$fac_data['block'].'_'.$fac_data['fac_abbr'].'_'.$fac_data['course_abbr'].'_'.$type.'">
         <thead class="table-info">
             <tr>
                 <th colspan="50" class="table-warning">

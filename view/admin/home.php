@@ -162,7 +162,9 @@
                         </div>
                     </div>                    
                 </div>
-                <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">...</div>
+                <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">
+                    ...
+                </div>
                 <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
                     <div class="row justify-content-center">
                         <div class="btn btn-lg btn-info m-3"  data-toggle="collapse" href="#addLoadForm" role="button" aria-expanded="false" aria-controls="addLoadForm">
