@@ -34,6 +34,7 @@ if(!$ldm_data){
             <tr>
                 <th colspan="50" class="table-warning">
                     <strong>'.$fac_data['dept'].'_'.$fac_data['year'].'_'.$fac_data['block'].'_'.$fac_data['fac_abbr'].'_'.$fac_data['course_abbr'].'_'.$type.'</strong>
+                    <button class="btn btn-sm btn-info" style="float: right" onclick="saveTable2PDF(this)">Download</button>
                 </th>
             </tr>
             <tr>

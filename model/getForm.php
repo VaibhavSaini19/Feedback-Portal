@@ -44,6 +44,8 @@ $qm = new QuestionsModel($db);
 
 $fac_list = $ldm->enlistLoadDistribution(["*"], $conditions);
 $res = $qm->enlistQuestions([], ["category='$cat'", "type='$type'"], [], ["id"]);
+// var_dump($cat, $type);
+// var_dump($res);
 
 if(!$fac_list){
     $data = '

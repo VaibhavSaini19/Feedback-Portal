@@ -6,6 +6,19 @@
         ?>
         <title>Home</title>
         <script src="js/home.js"></script>
+        <script>
+            function showForm(){
+                var cat = $("#formcat").val();
+                $.get("model/getForm.php", data={category: cat, type: 'theory'}, function(data, status){
+                    $("#theory").html(data);
+                });
+                $.get("model/getForm.php", data={category: cat, type: 'lab'}, function(data, status){
+                    $("#lab").html(data);
+                });
+                
+                $("#formTab").removeClass("d-none");
+            }
+        </script>
     </head>
     <body onload="showActive(); showFaculty()">
         <?php
@@ -163,7 +176,45 @@
                     </div>                    
                 </div>
                 <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">
-                    ...
+                    <div class="row justify-content-center">
+                        <div class="form-group col-6">
+                            <label for="cat">Form Category:</label>
+                            <select class="form-control" name="formcat" id="formcat" onchange="showForm()" required>
+                                <option value="" hidden disabled selected>Select category</option>
+                                <?php
+                                if ($cat_data && count($cat_data)){
+                                    foreach($cat_data as $cat){
+                                        echo '
+                                <option value="'.$cat['name'].'">'.$cat['name'].'</option>
+                                        ';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="justify-content-center d-none" id="formTab">
+                        <ul class="nav nav-tabs nav-fill" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="theory-tab" data-toggle="tab" href="#theory" role="tab"
+                                    aria-controls="theory" aria-selected="true">
+                                    <h4><u>Theory</u></h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="lab-tab" data-toggle="tab" href="#lab" role="tab"
+                                    aria-controls="lab" aria-selected="false">
+                                    <h4><u>Lab</u></h4>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="theory" role="tabpanel" aria-labelledby="theory-tab">
+                            </div>
+                            <div class="tab-pane fade" id="lab" role="tabpanel" aria-labelledby="lab-tab">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="load" role="tabpanel" aria-labelledby="load-tab">
                     <div class="row justify-content-center">

@@ -20,27 +20,52 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <script type="text/javascript">
-        function saveTable2PDF() {
-            var tables = $(".table-result");
-            for(var i=0; i<tables.length; i++){
-                let name = tables[i].id;
-                html2canvas(tables[i], {
-                    scale: window.devicePixelRatio,
-                    logging: true,
-                    profile: true,
-                    useCORS: false
-                }).then(function (canvas) {
-                        // var data = canvas.toDataURL('image/jpeg', wid=canvas.width, hgt=canvas.height);
-                        var data = canvas.toDataURL('image/jpeg', 1);
-                        var src = encodeURI(data);
-                        var pdf = jsPDF("l", "mm", "a4");
-                        const imgProps= pdf.getImageProperties(data);
-                        const pdfWidth = pdf.internal.pageSize.getWidth();
-                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                        pdf.text(15, 10, 'Result');
-                        pdf.addImage(src, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                        pdf.save(name+'.pdf');
-                });
+        function saveTable2PDF(el=null) {
+            if (el){
+                var tables = $(".table-result");
+                let name = $(el).closest('table').attr('id');
+                for(var i=0; i<tables.length; i++){
+                    if (name == tables[i].id){
+                        html2canvas(tables[i], {
+                                scale: window.devicePixelRatio,
+                                logging: true,
+                                profile: true,
+                                useCORS: false
+                            }).then(function (canvas) {
+                                    var data = canvas.toDataURL('image/jpeg', 1);
+                                    var src = encodeURI(data);
+                                    var pdf = jsPDF("l", "mm", "a4");
+                                    const imgProps= pdf.getImageProperties(data);
+                                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                                    pdf.text(15, 10, 'Result');
+                                    pdf.addImage(src, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                                    pdf.save(name+'.pdf');
+                            });
+                        break;
+                    }
+                }
+            }else{
+                var tables = $(".table-result");
+                for(var i=0; i<tables.length; i++){
+                    let name = tables[i].id;
+                    html2canvas(tables[i], {
+                        scale: window.devicePixelRatio,
+                        logging: true,
+                        profile: true,
+                        useCORS: false
+                    }).then(function (canvas) {
+                            var data = canvas.toDataURL('image/jpeg', 1);
+                            var src = encodeURI(data);
+                            var pdf = jsPDF("l", "mm", "a4");
+                            const imgProps= pdf.getImageProperties(data);
+                            const pdfWidth = pdf.internal.pageSize.getWidth();
+                            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                            pdf.text(15, 10, 'Result');
+                            pdf.addImage(src, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                            pdf.save(name+'.pdf');
+                    });
+                }
             }
         }
     </script>
@@ -288,7 +313,7 @@
                                                 </div>
                                                 <div class="row d-none" id="statsBtn">
                                                     <button class="btn btn-success mx-auto" id="statsSubmitBtn" type="submit" onclick="getStats()">Submit</button>
-                                                    <button class="btn btn-info mx-auto d-none" id="statsDownloadBtn" onclick="saveTable2PDF()">Download</button>
+                                                    <button class="btn btn-info mx-auto d-none" id="statsDownloadBtn" onclick="saveTable2PDF()">Download All</button>
                                                 </div>
                                                 <img src="" alt="" id="screenshot">
                                                 <div class="row justify-content-center border rounded m-2 p-2" id="statsTable">
