@@ -100,7 +100,7 @@ if(!$ldm_data){
                 }
                 $avg = round($avg/$rm_qn_count, 2);
                 $data .= '
-            <tr>
+            <tr class="table-success">
                 <td colspan="6"><strong>Average:</strong></td>
                 <td class="table-success"><strong>'.$avg.'</strong></td>
             </tr>

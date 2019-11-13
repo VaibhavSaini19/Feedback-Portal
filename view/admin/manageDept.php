@@ -224,7 +224,7 @@
                                     ?>
                                     <div class="row justify-content-center">
                                         <div class="form-group col-6">
-                                            <label for="cat">Form Category:</label>
+                                            <label for="cat">Show form for:</label>
                                             <select class="form-control" name="cat" id="cat" onchange="showForm()" required>
                                                 <option value="" hidden disabled selected>Select category</option>
                                                 <?php
@@ -238,8 +238,6 @@
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="row justify-content-center border rounded m-2" id="facultyTable">
                                     </div>
                                     <div class="justify-content-center d-none" id="formTab">
                                         <ul class="nav nav-tabs nav-fill" role="tablist">
@@ -262,6 +260,8 @@
                                             <div class="tab-pane fade" id="lab" role="tabpanel" aria-labelledby="lab-tab">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row justify-content-center border rounded m-2" id="facultyTable">
                                     </div>
                                 </div>
                             </div>
