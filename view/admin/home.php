@@ -17,6 +17,9 @@
                 });
                 
                 $("#formTab").removeClass("d-none");
+
+                $("#theory-tab").addClass("show active");
+                $("#theory").addClass("show active");
             }
         </script>
     </head>
@@ -176,7 +179,7 @@
                     </div>                    
                 </div>
                 <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">
-                    <div class="row justify-content-center">
+                <div class="row justify-content-center">
                         <div class="form-group col-6">
                             <label for="cat">Form Category:</label>
                             <select class="form-control" name="formcat" id="formcat" onchange="showForm()" required>

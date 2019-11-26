@@ -3,7 +3,7 @@ $(function() {
     $("#sortable").disableSelection();
 });
 
-function showSaveBtn(){
+function showSaveBtn() {
     // console.log($("#theory-tab").hasClass("active"));
     // console.log($("#lab-tab").hasClass("active"));
     // if($("#theory-tab").hasClass("active")){
@@ -37,7 +37,7 @@ function addOption(addOptBtn) {
         var newOption = slotElement.querySelector(".option").cloneNode(true);
         newOption.nodeValue = "";
         newOption.getElementsByTagName("input")[0].value = "";
-        console.log(newOption.getElementsByTagName("input")[0].name);
+        // console.log(newOption.getElementsByTagName("input")[0].name);
         var btn = addOptBtn.target;
         //console.log(btn);
         parent.insertBefore(newOption, btn);
@@ -107,9 +107,6 @@ function addSlot(slot) {
         inputs[i].value = "";
     }
     var temp = "customSwitch" + (document.getElementsByClassName("slot").length + 1);
-    newSlot.getElementsByClassName("custom-control-input")[0].id = temp;
-    newSlot.getElementsByClassName("custom-control-input")[0].checked = false;
-    newSlot.getElementsByClassName("custom-control-label")[0].htmlFor = temp;
     referenceChild.parentNode.insertBefore(newSlot, referenceChild.nextSibling);
 }
 function removeSlot(slot) {
@@ -129,10 +126,10 @@ function copySlot(slot) {
     // console.log(newSlot);
     var totalSlots = getSlotsLen() + 1;
     // console.log(totalSlots);
-    newSlot.querySelector('#question').name = 'question' + (totalSlots);
+    newSlot.querySelector("#question").name = "question" + totalSlots;
     // console.log(newSlot.querySelector('#question').name);
-    newSlot.querySelectorAll('.response').forEach(element => {
-        element.name = 'response' + (totalSlots) + '[]';
+    newSlot.querySelectorAll(".response").forEach(element => {
+        element.name = "response" + totalSlots + "[]";
     });
     // console.log(newSlot.querySelectorAll('.response')[0].name);
     referenceChild.parentNode.insertBefore(newSlot, referenceChild.nextSibling);
