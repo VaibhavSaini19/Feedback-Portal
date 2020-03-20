@@ -9,6 +9,7 @@
         $act = 'login';
     }
     
+
     // var_dump($act);
     require '../core/db.php';
     $db = new DB();
@@ -54,6 +55,10 @@
                 header('Location: student.php?act=complete&msg=fail');
             }
         case 'complete':
+            require '../model/dept_model.php';
+                $dm = new DepartmentModel($db);
+                $deptName = $_SESSION['user']['dept'];
+                $dept_data = $dm->enlistDepartment(["name='$deptName'"]);
             require '../view/student/complete.php';
             break;
         default:
