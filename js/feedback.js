@@ -37,6 +37,7 @@ function addOption(addOptBtn) {
         var newOption = slotElement.querySelector(".option").cloneNode(true);
         newOption.nodeValue = "";
         newOption.getElementsByTagName("input")[0].value = "";
+        newOption.getElementsByTagName("input")[0].autofocus= "true";
         // console.log(newOption.getElementsByTagName("input")[0].name);
         var btn = addOptBtn.target;
         //console.log(btn);
