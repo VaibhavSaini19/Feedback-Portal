@@ -1,5 +1,5 @@
 # Feedback-Portal
-A simple Feedback portal for educational institutes
+A simple platform for educational institutes to take feedback through extensively dynamic forms and analyse results through bar graphs
 
 # Preview
 
