@@ -24,6 +24,9 @@ A simple Feedback portal for educational institutes
 ## Admin Dept Statistics
 ![](https://github.com/VaibhavSaini19/Feedback-Portal/blob/master/screenshots/Admin%20Dept%20stats.png)
 
+## Admin Dept Graphs
+![](https://github.com/VaibhavSaini19/Feedback-Portal/blob/master/screenshots/Admin%20Dept%20graphs.png)
+
 ## Student Feedback Form
 ![](https://github.com/VaibhavSaini19/Feedback-Portal/blob/master/screenshots/Student%20feedback.png)
 
